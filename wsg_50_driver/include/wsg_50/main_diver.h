@@ -1,5 +1,5 @@
-#ifndef MAIN_ACTION_DRIVER_H
-#define MAIN_ACTION_DRIVER_H
+#ifndef MAIN_DRIVER_H
+#define MAIN_DRIVER_H
 
 #include <signal.h>
 #include <stdio.h>

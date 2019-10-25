@@ -57,3 +57,8 @@ The script *cmd_measure.lua* must be running on the gripper for the script mode.
 ## Node wsg\_50_can
 
 Remains unchanged; new features not implemented here. 
+
+# Acknowledgements
+This repository takes the inspiration from the work of:
+* [Nicolas Alt](https://github.com/nalt/wsg50-ros-pkg)
+* [Opical Weiss](https://gitlab.cs.washington.edu/optical_weiss/wsg50-ros-pkg)

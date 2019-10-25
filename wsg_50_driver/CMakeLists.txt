@@ -109,7 +109,7 @@ add_dependencies(hand_test wsg_50_common_generate_messages_cpp)
 #add_executable(wsg_50_ip src/main.cpp ${DRIVER_SOURCES})
 #target_link_libraries(wsg_50_ip ${catkin_LIBRARIES})
 #add_dependencies(wsg_50_ip wsg_50_common_generate_messages_cpp)
-add_executable(wsg_50_ip src/new/main_action_driver.cpp ${DRIVER_SOURCES})
+add_executable(wsg_50_ip src/main.cpp ${DRIVER_SOURCES})
 target_link_libraries(wsg_50_ip ${catkin_LIBRARIES})
 add_dependencies(wsg_50_ip wsg_50_common_generate_messages_cpp)
 
