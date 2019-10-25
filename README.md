@@ -1,3 +1,7 @@
+|Branch        | Build Status      |
+|--------------|-------------------|
+|master(Melodic)       |[![Build Status](https://travis-ci.org/lernfabrik/wsg50_ros.svg?branch=master)](https://travis-ci.org/lernfabrik/wsg50_ros)|
+
 # ROS package for Schunk WSG-50 Gripper
 Forked from: [https://code.google.com/p/wsg50-ros-pkg](https://code.google.com/p/wsg50-ros-pkg)
 
