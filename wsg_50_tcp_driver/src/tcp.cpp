@@ -52,8 +52,10 @@ iwtros::tcp::tcp(const void *params){
 
     try{
         connect(conn.sock, (struct sockaddr *) &conn.si_server, sizeof(conn.si_server));
+        result = true;
     }catch(const std::exception& e){
-        std::cerr << e.what() << " = Open TCP socket is FAILED" << '\n'; 
+        std::cerr << e.what() << " = Open TCP socket is FAILED" << '\n';
+        result = false; 
     }
 }
 

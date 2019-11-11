@@ -54,6 +54,7 @@ namespace iwtros{
         int read (unsigned char *buf, unsigned int len);
         int write (unsigned char *buf, unsigned int len);
         ~tcp();
+        int result;
     }; // class tcp
 } // namespace iwtros
 
