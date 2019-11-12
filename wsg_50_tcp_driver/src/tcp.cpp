@@ -59,8 +59,11 @@ iwtros::tcp::tcp(const void *params){
     }
 }
 
-iwtros::tcp::~tcp(void){
-    close (conn.sock);
+iwtros::tcp::~tcp(){ 
+}
+
+void iwtros::tcp::close_tcp(){
+    close (this->conn.sock);
     conn.sock = 0;
 }
 

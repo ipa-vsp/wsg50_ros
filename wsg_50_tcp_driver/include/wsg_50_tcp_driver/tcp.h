@@ -47,12 +47,13 @@ namespace iwtros{
 
     class tcp{
     private:
-        static tcp_conn_t conn;
+        tcp_conn_t conn;
         tcp_params_t * _tcp;
     public:
         tcp(const void *params);
         int read (unsigned char *buf, unsigned int len);
         int write (unsigned char *buf, unsigned int len);
+        void close_tcp();
         ~tcp();
         int result;
     }; // class tcp

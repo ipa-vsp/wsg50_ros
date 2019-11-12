@@ -98,7 +98,7 @@ void quit( const char *reason )
 }
 
 
-const char * getStateValues( unsigned char *b ){
+const char * getStateValue( unsigned char *b ){
 
 	/*
 	unsigned char aux[4]; 

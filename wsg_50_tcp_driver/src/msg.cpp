@@ -24,9 +24,8 @@
 #include "wsg_50_tcp_driver/checksum.h"
 #include "wsg_50_tcp_driver/msg.h"
 
-iwtros::msg::msg(const void *param){
-    interface_t = new iwtros::tcp::tcp(param);
-    if(interface_t->result){
+iwtros::msg::msg(const void *param): tcp(param){
+    if(this->result){
         std::cout << "Open message communition with TCP socket SUCCESSFULL" << '\n';
     }else{
         std::cerr << "Failed to create message communication brigde with TCP socket" << '\n';
@@ -35,7 +34,7 @@ iwtros::msg::msg(const void *param){
 }
 
 iwtros::msg::~msg(void){
-    interface_t->~tcp();
+    //Will the descruct the tcp??
 }
 
 /** Send command 
@@ -65,9 +64,9 @@ int iwtros::msg::send(msg_t *msg){
     memcpy(buf + 6, msg->data, msg->len);
     memcpy(buf + 6 + msg->len, (unsigned char *)&crc, 2);
 
-    res = interface_t->write(buf, 6 + msg->len + 2);
+    res = this->write(buf, 6 + msg->len + 2);
     if(res < 6 + (int)msg->len+2){
-        interface_t->~tcp();
+        this->close_tcp();
         quit("Failed to submit message checksum");
         return -1;
     }
@@ -76,6 +75,11 @@ int iwtros::msg::send(msg_t *msg){
     return msg->len + 8;
 }
 
+/** Receive answer
+ * @param **response		Data buffer
+ * @param len				Expected size of message
+ * @return Overall number of bytes received, including header and checksum. -1 on error.
+ */
 int iwtros::msg::receive(msg_t * msg){
     int res;
 	unsigned char header[3];			// 1 byte command, 2 bytes payload length
@@ -85,12 +89,12 @@ int iwtros::msg::receive(msg_t * msg){
     //Syncing - neccessary for compatiblility
     sync = 0;
     while ( sync != MSG_PREAMBLE_LEN){
-        res = interface_t->read(header, 1);
+        res = this->read(header, 1);
         if(header[0] == MSG_PREAMBLE_BYTE) sync++;
     }
 
     //Read headers;
-    res = interface_t->read(header, 3);
+    res = this->read(header, 3);
     if(res < 3 ){
         fprintf(stderr, "Failed to receive data (%d bytes to read)\n", res);
         return -1;
@@ -105,7 +109,7 @@ int iwtros::msg::receive(msg_t * msg){
     // Allocate space for paylaod abd checksum
     msg->data = (unsigned char *) new char(msg->len + 2u);
     //Read the payload and checksum
-    res = interface_t->read (msg->data, msg->len + 2);
+    res = this->read (msg->data, msg->len + 2);
     if(res < (int)msg->len + 2){
         fprintf(stderr, "Not enough data (%d, expected %d", res, msg->len + 2);
         return -1;
@@ -118,4 +122,13 @@ int iwtros::msg::receive(msg_t * msg){
         return -1;
     }
     return msg->len + 8; // Why 8? need to check this on the datasheet
+}
+
+
+/** Free message struct
+ * @param *msg Pointer to the message struct
+ */
+void iwtros::msg::_delete(msg_t *msg){
+    if (msg->data) delete msg->data;
+    memset(msg, 0, sizeof(msg));
 }

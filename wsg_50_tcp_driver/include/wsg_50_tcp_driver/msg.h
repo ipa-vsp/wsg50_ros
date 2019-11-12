@@ -40,15 +40,13 @@ typedef struct{
 }msg_t;
 
 namespace iwtros{
-    class msg{
-    private:
-        iwtros::tcp::tcp *interface_t;
+    class msg : public tcp{
     public:
         msg(const void *param);
         ~msg();
         int send(msg_t *msg);
         int receive(msg_t *msg);
-        typedef void _delete (msg_t *msg);
+        void _delete (msg_t *msg);
     };
      
 }
