@@ -44,6 +44,7 @@ iwtros::cmd::cmd(const char *addr, unsigned short port){
 }
 
 iwtros::cmd::~cmd(){
+    delete this->_msg;
 }
 
 /**
