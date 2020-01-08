@@ -92,7 +92,7 @@ bool iwtros::function::move( float width, float speed, bool stop_on_block, bool 
 
     //Copy target width and speed
     memcpy(&payload[1], &width, sizeof(float));
-    memcpy(&payload[5], &width, sizeof(float));
+    memcpy(&payload[5], &speed, sizeof(float));
 
     if(!ignore_response){
         res = this->submit(0x21, payload, 9, true, &resp, &resp_len);
@@ -172,8 +172,8 @@ int iwtros::function::ack_fault(void){
 	unsigned int resp_len;
 
     payload[0] = 0x61;                  //Refere datasheet
-    payload[0] = 0x63;
-    payload[0] = 0x6B;
+    payload[1] = 0x63;
+    payload[2] = 0x6B;
 
     //Submit the command and wait for the response
     res = this->submit(0x24, payload, 3, true, &resp, &resp_len);

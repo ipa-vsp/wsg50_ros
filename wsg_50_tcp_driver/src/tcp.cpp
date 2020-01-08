@@ -34,10 +34,7 @@ iwtros::tcp::tcp(const void *params){
     conn.server = _tcp->addr;
     
     conn.sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if(conn.sock <0){
-        fprintf( stderr, "Cannot open TCP socket\n" );
-        result = false;
-    }
+    if(conn.sock < 0) fprintf(stderr, "Can not connect to TCP SOCKET\n");
 
     memset((char *) &conn.si_server, 0, sizeof(conn.si_server));
     conn.si_server.sin_family = AF_INET;
@@ -49,12 +46,12 @@ iwtros::tcp::tcp(const void *params){
     struct timeval timeout = { timeout.tv_sec = TCP_RCV_TIMEOUT_SEC, timeout.tv_usec = 0 };
     setsockopt(conn.sock, SOL_SOCKET, SO_RCVTIMEO, (void *) &timeout, (socklen_t) sizeof(timeout));    /// Used "timeout" instead of "struct timeout" inside sizeof
 
-    res = connect(conn.sock, (struct sockaddr *) &conn.si_server, sizeof(conn.si_server));
-    if (res < 0){
-        fprintf(stderr, "Can not connect to the TCP socket --- TCP::TCP\n");
-        result = false;
-    }else{
+    try{
+        connect(conn.sock, (struct sockaddr *) &conn.si_server, sizeof(conn.si_server));
         result = true;
+    }catch(const std::exception& e){
+        std::cerr << e.what() << " = Open TCP socket is FAILED" << '\n';
+        result = false; 
     }
 }
 
@@ -92,7 +89,11 @@ int iwtros::tcp::read (unsigned char *buf, unsigned int len){
 int iwtros::tcp::write (unsigned char *buf, unsigned int len){
     int res;
     if ( conn.sock <= 0 ) return( -1 );
-    res = send(conn.sock, buf, len, 0);
+    try{
+        res = send(conn.sock, buf, len, 0);
+    }catch(std::exception e){
+        std::cerr << e.what() << " : the sending error" << std::endl;
+    }
     if(res >= 0) return (res);
     else{
         fprintf(stderr, "Failed to send data using TCP socket\n");
