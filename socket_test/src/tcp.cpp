@@ -89,7 +89,11 @@ int iwtros::tcp::read (unsigned char *buf, unsigned int len){
 int iwtros::tcp::write (unsigned char *buf, unsigned int len){
     int res;
     if ( conn.sock <= 0 ) return( -1 );
-    res = send(conn.sock, buf, len, 0);
+    try{
+        res = send(conn.sock, buf, len, 0);
+    }catch(std::exception e){
+        std::cerr << e.what() << " : the sending error" << std::endl;
+    }
     if(res >= 0) return (res);
     else{
         fprintf(stderr, "Failed to send data using TCP socket\n");
