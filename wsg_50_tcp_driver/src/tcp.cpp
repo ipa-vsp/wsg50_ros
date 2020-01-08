@@ -59,6 +59,7 @@ iwtros::tcp::tcp(const void *params){
 }
 
 iwtros::tcp::~tcp(){ 
+    this->close_tcp();
 }
 
 void iwtros::tcp::close_tcp(){
