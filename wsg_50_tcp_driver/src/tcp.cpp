@@ -33,11 +33,10 @@ iwtros::tcp::tcp(const void *params){
     _tcp = (tcp_params_t *) params;
     conn.server = _tcp->addr;
     
-    try{
-        conn.sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    }
-    catch(const std::exception& e){
-        std::cerr << e.what() << '\n';
+    conn.sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if(conn.sock <0){
+        fprintf( stderr, "Cannot open TCP socket\n" );
+        result = false;
     }
 
     memset((char *) &conn.si_server, 0, sizeof(conn.si_server));
@@ -50,12 +49,12 @@ iwtros::tcp::tcp(const void *params){
     struct timeval timeout = { timeout.tv_sec = TCP_RCV_TIMEOUT_SEC, timeout.tv_usec = 0 };
     setsockopt(conn.sock, SOL_SOCKET, SO_RCVTIMEO, (void *) &timeout, (socklen_t) sizeof(timeout));    /// Used "timeout" instead of "struct timeout" inside sizeof
 
-    try{
-        connect(conn.sock, (struct sockaddr *) &conn.si_server, sizeof(conn.si_server));
+    res = connect(conn.sock, (struct sockaddr *) &conn.si_server, sizeof(conn.si_server));
+    if (res < 0){
+        fprintf(stderr, "Can not connect to the TCP socket --- TCP::TCP\n");
+        result = false;
+    }else{
         result = true;
-    }catch(const std::exception& e){
-        std::cerr << e.what() << " = Open TCP socket is FAILED" << '\n';
-        result = false; 
     }
 }
 

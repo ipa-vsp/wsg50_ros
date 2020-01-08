@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Launch the joint controller -->
+  <node pkg="wsg_50_tcp_driver" type="test_node"  name="test" />
+
+</launch>

@@ -3,9 +3,10 @@
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "test");
-    std::string addr = "17.64.64.6";
+    std::string addr = "172.31.1.160";
     unsigned short port = 22;
     iwtros::function test(addr.c_str(), port);
+    test.homing();
     
     return 0;
 }
