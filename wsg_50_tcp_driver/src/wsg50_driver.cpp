@@ -25,6 +25,13 @@ namespace iwtros
         // Establish the gripper connection       
     }
 
+    void wsg50::run(){
+        // Check for the gripper connection is established
+        // Do not initialize control loop if the gripper connection is failed
+        std::thread t1(&wsg50::_ctrl_loop, this);
+        t1.join();
+    }
+
     void wsg50::_load_param(){
         ros::NodeHandle n_p("~");
 
@@ -56,11 +63,11 @@ namespace iwtros
             _nh.getParam(_robot_description, urdf_string);
             usleep(100000);
         }
-        ROS_INFO_STREAM_NAMED("Iiwa", "Received urdf from param server, parsing...");
+        ROS_INFO_STREAM_NAMED("WSG50", "Received urdf from param server, parsing...");
 
         const urdf::Model* const urdf_model_ptr = urdf_model.initString(urdf_string) ? &urdf_model : nullptr;
         if (urdf_model_ptr == nullptr)
-            ROS_WARN_STREAM_NAMED("Iiwa", "Could not read URDF from '" << _robot_description << "' parameters. Joint limits will not work.");
+            ROS_WARN_STREAM_NAMED("WSG50", "Could not read URDF from '" << _robot_description << "' parameters. Joint limits will not work.");
 
         // Initialize the controller
         for(int i = 0; i < _num_joints; i++){
@@ -96,8 +103,45 @@ namespace iwtros
                 _position_joint_saturation_interface.registerHandle(joint_limit_handle);
             }
             _position_joint_interface.registerHandle(joint_position_handle);
+
+            // Create effor joint interface
+            hardware_interface::JointHandle joint_effort_handle(joint_state_handle, &_joint_effort_command[i]);
+            if(has_limits){
+                joint_limits_interface::EffortJointSoftLimitsHandle joint_limit_handle(joint_effort_handle, limits, soft_limits);
+                _effort_joint_limit_interface.registerHandle(joint_limit_handle);
+            }else{
+                joint_limits_interface::EffortJointSaturationHandle joint_limit_handle(joint_effort_handle, limits);
+                _effort_joint_saturation_interface.registerHandle(joint_limit_handle);
+            }
+            _effort_joint_interface.registerHandle(joint_effort_handle);
+
+            // Create velocity joint interface
+            hardware_interface::JointHandle joint_velocity_handle(joint_state_handle, &_joint_velocity_command[i]);
+            if(has_limits){
+                joint_limits_interface::VelocityJointSoftLimitsHandle joint_limit_handle(joint_velocity_handle, limits, soft_limits);
+                _velocity_joint_limit_interface.registerHandle(joint_limit_handle);
+            }else{
+                joint_limits_interface::VelocityJointSaturationHandle joint_limit_handle(joint_velocity_handle, limits);
+                _velocity_joint_saturation_interface.registerHandle(joint_limit_handle);
+            }
+            _velocity_joint_interface.registerHandle(joint_effort_handle);
+
         }
         registerInterface(&_joint_state_interface);
-        registerInterface(&_position_joint_interface);  
+        registerInterface(&_position_joint_interface);
+        hardware_interface::InterfaceManager::registerInterface(&_effort_joint_interface);
+        hardware_interface::InterfaceManager::registerInterface(&_velocity_joint_interface);
+    }
+
+    void wsg50::_ctrl_loop(){
+        static ros::Rate rate(_control_freq);
+        while(ros::ok()){
+            ros::Time time = ros::Time::now();
+            auto elapsed_time = ros::Duration(1. / _control_freq);
+            _read(elapsed_time);
+            _controller_manager->update(ros::Time::now(), elapsed_time);
+            _write(elapsed_time);
+            rate.sleep();
+        }
     }
 } // namespace iwtros

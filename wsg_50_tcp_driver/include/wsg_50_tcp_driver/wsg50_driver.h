@@ -34,9 +34,15 @@ namespace iwtros{
             // Interface
             hardware_interface::JointStateInterface _joint_state_interface;
             hardware_interface::PositionJointInterface _position_joint_interface;
+            hardware_interface::EffortJointInterface _effort_joint_interface;
+            hardware_interface::VelocityJointInterface _velocity_joint_interface;
 
             joint_limits_interface::PositionJointSaturationInterface _position_joint_saturation_interface;
             joint_limits_interface::PositionJointSoftLimitsInterface _position_joint_limit_interface;
+            joint_limits_interface::EffortJointSaturationInterface _effort_joint_saturation_interface;
+            joint_limits_interface::EffortJointSoftLimitsInterface _effort_joint_limit_interface;
+            joint_limits_interface::VelocityJointSaturationInterface _velocity_joint_saturation_interface;
+            joint_limits_interface::VelocityJointSoftLimitsInterface _velocity_joint_limit_interface;
 
             // Shared memory
             int _num_joints;
