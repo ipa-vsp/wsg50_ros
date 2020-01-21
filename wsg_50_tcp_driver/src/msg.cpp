@@ -121,7 +121,7 @@ int iwtros::msg::receive(msg_t * msg){
         fprintf (stderr, "Checksum err\n");
         return -1;
     }
-    return msg->len + 8; // Why 8? need to check this on the datasheet
+    return msg->len + 8; // ToDo: Why 8? need to check this on the datasheet
 }
 
 

@@ -22,9 +22,6 @@
 
 namespace iwtros{
     class cmd{
-        protected:
-            bool connected = false;
-            msg * _msg;
         public:
             cmd(const char *addr, unsigned short port);
             ~cmd();  
@@ -32,6 +29,8 @@ namespace iwtros{
             bool is_connected( void );
             status_t get_response_status(unsigned char * response);
             int submit(unsigned char id, unsigned char *payload, unsigned int len, bool pending, unsigned char **response, unsigned int *response_len);
+            bool connected = false;
+            msg * _msg;
     };
 }
 

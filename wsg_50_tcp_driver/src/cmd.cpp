@@ -39,8 +39,11 @@ iwtros::cmd::cmd(const char *addr, unsigned short port){
     params.addr = str_to_ipaddr(addr);
     params.port = port;
 
-    _msg = new msg(&params); 
-    connected = true;
+    _msg = new msg(&params);
+    if(_msg->result)
+        connected = true;
+    else
+        connected = false;
 }
 
 iwtros::cmd::~cmd(){
