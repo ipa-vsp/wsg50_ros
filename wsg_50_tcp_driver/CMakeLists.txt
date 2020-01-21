@@ -21,6 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_srvs
   tf
   tf2
+  wsg_50_common
 )
 
 ## System dependencies are found with CMake's conventions
@@ -29,7 +30,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES wsg_50_tcp_driver
-  CATKIN_DEPENDS actionlib control_msgs controller_manager geometry_msgs hardware_interface roscpp rospy sensor_msgs std_msgs std_srvs tf tf2
+  CATKIN_DEPENDS actionlib control_msgs wsg_50_common controller_manager geometry_msgs hardware_interface roscpp rospy sensor_msgs std_msgs std_srvs tf tf2
 #  DEPENDS system_lib
 )
 
@@ -55,3 +56,6 @@ include_directories(
 
 add_executable(test_node src/test.cpp ${DRIVER_SOURCES})
 target_link_libraries(test_node ${catkin_LIBRARIES})
+
+add_executable(wsg50_action_node src/wsg50.cpp ${DRIVER_SOURCES})
+target_link_libraries(wsg50_action_node ${catkin_LIBRARIES})

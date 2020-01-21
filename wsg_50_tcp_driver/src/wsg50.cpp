@@ -193,55 +193,55 @@ namespace iwtros{
             // Handle response types
             int motion = -1;
             switch (msg.id) {
-            /*** Opening ***/
-            case 0x43:
-                status_msg.width = val;
-                pub_state = true;
-                cnt[0]++;
-                break;
+                /*** Opening ***/
+                case 0x43:
+                    status_msg.width = val;
+                    pub_state = true;
+                    cnt[0]++;
+                    break;
 
-            /*** Speed ***/
-            case 0x44:
-                status_msg.speed = val;
-                cnt[1]++;
-                break;
+                /*** Speed ***/
+                case 0x44:
+                    status_msg.speed = val;
+                    cnt[1]++;
+                    break;
 
-            /*** Force ***/
-            case 0x45:
-                status_msg.force = val;
-                cnt[2]++;
-                break;
+                /*** Force ***/
+                case 0x45:
+                    status_msg.force = val;
+                    cnt[2]++;
+                    break;
 
-            /*** Move ***/
-            // Move commands are sent from outside this thread
-            case 0x21:
-                if (status == E_SUCCESS) {
-                    ROS_INFO("Position reached");
-                    motion = 0;
-                } else if (status == E_AXIS_BLOCKED) {
-                    ROS_INFO("Axis blocked");
-                    motion = 0;
-                } else if (status == E_CMD_PENDING) {
-                    ROS_INFO("Movement started");
-                    motion = 1;
-                } else if (status == E_ALREADY_RUNNING) {
-                    ROS_INFO("Movement error: already running");
-                } else if (status == E_CMD_ABORTED) {
-                    ROS_INFO("Movement aborted");
-                    motion = 0;
-                } else {
-                    ROS_INFO("Movement error");
-                    motion = 0;
-                }
-                break;
+                /*** Move ***/
+                // Move commands are sent from outside this thread
+                case 0x21:
+                    if (status == E_SUCCESS) {
+                        ROS_INFO("Position reached");
+                        motion = 0;
+                    } else if (status == E_AXIS_BLOCKED) {
+                        ROS_INFO("Axis blocked");
+                        motion = 0;
+                    } else if (status == E_CMD_PENDING) {
+                        ROS_INFO("Movement started");
+                        motion = 1;
+                    } else if (status == E_ALREADY_RUNNING) {
+                        ROS_INFO("Movement error: already running");
+                    } else if (status == E_CMD_ABORTED) {
+                        ROS_INFO("Movement aborted");
+                        motion = 0;
+                    } else {
+                        ROS_INFO("Movement error");
+                        motion = 0;
+                    }
+                    break;
 
-            /*** Stop ***/
-            // Stop commands are sent from outside this thread
-            case 0x22:
-                // Stop command; nothing to do
-                break;
-            default:
-                ROS_INFO("Received unknown respone 0x%02x (%2dB)\n", msg.id, msg.len);
+                /*** Stop ***/
+                // Stop commands are sent from outside this thread
+                case 0x22:
+                    // Stop command; nothing to do
+                    break;
+                default:
+                    ROS_INFO("Received unknown respone 0x%02x (%2dB)\n", msg.id, msg.len);
             }
 
             // ***** PUBLISH motion message
