@@ -29,9 +29,6 @@
 #define GRIPPER_MIN_OPEN 0.0
 
 namespace iwtros{
-
-    typedef actionlib::SimpleActionServer<control_msgs::GripperCommandAction> Gripper;
-
     class wsg50{
     private:
         float increment;
@@ -78,7 +75,7 @@ namespace iwtros{
         void gripperCommandExecution(const control_msgs::GripperCommandGoalConstPtr& goal);
 
         protected:
-            Gripper gs_;
+            actionlib::SimpleActionServer<control_msgs::GripperCommandAction>  gs_;
     };
     
 }

@@ -6,27 +6,13 @@
 * Date: 20.01.2020
 */
 
-#include <wsg_50_tcp_driver/wsg50.h>
+#include "wsg_50_tcp_driver/wsg50.h"
 
 namespace iwtros{
 
-    template<typename T_action, typename T_goal, typename T_result>
-    void wsg50::handleError(actionlib::SimpleActionServer<T_action>* server,
-                        std::function<bool(const T_goal&)> handler,
-                        const T_goal& goal){
-        T_result result;
-        try{
-            result.success = handler(goal);
-            server->setSucceeded(result);
-        }catch(int e){
-            ROS_ERROR_STREAM("Error handling error" << e);
-            result.success = false;
-            result.error = e;
-            server->setAborted(result);
-        }
-    }
-
     void wsg50::gripperCommandExecution(const control_msgs::GripperCommandGoalConstPtr& goal){
+        ros::Rate r(1);
+        ROS_INFO("Excuting Gripper action");
         auto gripper_command_handler = [goal, this](auto default_speed){
             /*HACK: Gripper motion given by the MoveIt is for one 
             finger and other should mimic respectively.
@@ -64,17 +50,17 @@ namespace iwtros{
         }catch(const std::exception& e){
             std::cerr << e.what() << '\n';
             ROS_ERROR("Failed to move the gripper");
+            gs_.setAborted();
         }
-        gs_.setAborted();
     }
         
-    wsg50::wsg50(ros::NodeHandle& nh, const char *addr, unsigned short port):gs_(nh, "gripper_action", boost::bind(&wsg50::gripperCommandExecution, this, _1), false), _nh(nh),
+    wsg50::wsg50(ros::NodeHandle& nh, const char *addr, unsigned short port):gs_(nh, "wsg50_gripper_action", boost::bind(&wsg50::gripperCommandExecution, this, _1), false), _nh(nh),
                                         gripperCom(addr, port){
         // _nh.param("ip", ip, std::string("172.31.1.160"));
         // _nh.param("port", port, 1000);
         _nh.param("local_port", local_port, 1501);
         _nh.param("com_mode", com_mode, std::string("auto_update"));
-        _nh.param("rate", rate, 50.0); // With custom script, up to 30Hz are possible
+        _nh.param("rate", rate, 20.0); // With custom script, up to 30Hz are possible
         _nh.param("grasping_force", grasping_force, 40.0);
         _nh.param("speed", speed, 40.0);
 
@@ -91,6 +77,7 @@ namespace iwtros{
 
         if (gripperCom.connected){
             ROS_INFO("Gripper connection stablished");
+            // gs_.registerGoalCallback(boost::bind(&wsg50::gripperCommandExecution, this, _1));
             gs_.start();
 
             //Publisher
@@ -164,14 +151,15 @@ namespace iwtros{
         gripperCom.getForce(interval_ms);
 
 
-        msg_t msg; msg.id = 0; msg.data = 0; msg.len = 0;
+        msg_t msg; 
+        msg.id = 0; msg.data = 0; msg.len = 0;
         int cnt[3] = {0,0,0};
         auto time_start = std::chrono::system_clock::now();
 
-
-        while (g_mode_periodic) {
+        ros::Rate r(20);
+        while (g_mode_periodic & ros::ok()) {
             // Receive gripper response
-            gripperCom._msg->_delete(&msg);
+            // sgripperCom._msg->_delete(&msg);
             res = gripperCom._msg->receive( &msg );
             if (res < 0 || msg.len < 2) {
                 ROS_ERROR("Gripper response failure");
@@ -284,6 +272,7 @@ namespace iwtros{
                 ROS_DEBUG_STREAM((info + " expected: " + std::to_string((int)rate_exp) + "Hz").c_str());
                 cnt[0] = 0; cnt[1] = 0; cnt[2] = 0;
             }
+            r.sleep();
             ros::spinOnce();
         }
 
@@ -302,7 +291,7 @@ int main(int argc, char** argv){
     ros::init(argc, argv, "wsg50_gripper");
     ros::NodeHandle nh("~");
 
-    iwtros::wsg50 wsg(nh, "172.16.17.160", 1000);
-
+    iwtros::wsg50 wsg(nh, "172.31.1.160", 1000);
+    
     ros::spin();
 }

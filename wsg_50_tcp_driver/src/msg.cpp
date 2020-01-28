@@ -111,7 +111,7 @@ int iwtros::msg::receive(msg_t * msg){
     //Read the payload and checksum
     res = this->read (msg->data, msg->len + 2);
     if(res < (int)msg->len + 2){
-        fprintf(stderr, "Not enough data (%d, expected %d", res, msg->len + 2);
+        fprintf(stderr, "Not enough data (%d, expected %d)\n", res, msg->len + 2);
         return -1;
     }
 

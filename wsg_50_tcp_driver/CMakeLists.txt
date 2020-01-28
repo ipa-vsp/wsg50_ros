@@ -9,6 +9,7 @@ project(wsg_50_tcp_driver)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   actionlib
+  actionlib_msgs
   control_msgs
   controller_manager
   geometry_msgs
@@ -25,12 +26,21 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 ## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost REQUIRED COMPONENTS system)
+
+add_action_files(
+  DIRECTORY action
+  FILES wsg50Move.action
+)
+
+generate_messages(
+  DEPENDENCIES actionlib_msgs std_msgs  # Or other packages containing msgs
+)
 
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES wsg_50_tcp_driver
-  CATKIN_DEPENDS actionlib control_msgs wsg_50_common controller_manager geometry_msgs hardware_interface roscpp rospy sensor_msgs std_msgs std_srvs tf tf2
+  CATKIN_DEPENDS actionlib_msgs actionlib control_msgs wsg_50_common controller_manager geometry_msgs hardware_interface roscpp rospy sensor_msgs std_msgs std_srvs tf tf2
 #  DEPENDS system_lib
 )
 
@@ -56,6 +66,9 @@ include_directories(
 
 add_executable(test_node src/test.cpp ${DRIVER_SOURCES})
 target_link_libraries(test_node ${catkin_LIBRARIES})
+add_dependencies(test_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 
 add_executable(wsg50_action_node src/wsg50.cpp ${DRIVER_SOURCES})
 target_link_libraries(wsg50_action_node ${catkin_LIBRARIES})
+add_dependencies(wsg50_action_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
