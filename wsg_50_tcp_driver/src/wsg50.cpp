@@ -284,6 +284,7 @@ namespace iwtros{
                 ROS_DEBUG_STREAM((info + " expected: " + std::to_string((int)rate_exp) + "Hz").c_str());
                 cnt[0] = 0; cnt[1] = 0; cnt[2] = 0;
             }
+            ros::spinOnce();
         }
 
         // Disable automatic updates
