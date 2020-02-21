@@ -63,7 +63,7 @@
   </link>
 
   <!-- GRIPPER LEFT -->
-  <joint name="${name}_finger_left_joint" type="prismatic">
+  <joint name="${name}_finger_left_joint" type="fixed">
      <limit lower="-0.055" upper="-0.0027" effort="1.0" velocity="1.0"/>
      <origin xyz="0 0 0" rpy="0 0 0" />      <!--origin xyz="-0.0067 0 0.049" rpy="0 0 0" /-->
      <parent link="${name}_base_link"/>
@@ -72,25 +72,6 @@
      <axis xyz="1 0 0"/>
      <limit effort="100" velocity="100"/>
   </joint>
-
-  <!--transmission name="${name}_base_trans_left" type="pr2_mechanism_model/SimpleTransmission">
-     <actuator name="${name}_base_motor_left" />
-     <joint name="${name}_finger_left_joint" />
-     <mechanicalReduction>1</mechanicalReduction>
-     <motorTorqueConstant>1</motorTorqueConstant>
-     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-  </transmission-->
-   <transmission name="${name}_base_trans_left">	  
-     <type>transmission_interface/SimpleTransmission</type>	     
-     <actuator name="${name}_base_motor_left">	     
-       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>	    
-       <mechanicalReduction>1</mechanicalReduction>	     
-       <!--motorTorqueConstant>1</motorTorqueConstant-->	
-     </actuator>	
-     <joint name="${name}_finger_left_joint">	
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>	
-     </joint>	
-  </transmission>
 
   <link name="${name}_gripper_left">
       <inertial>
@@ -127,54 +108,9 @@
       <turnGravityOff>false</turnGravityOff>
    </gazebo>
 
-
-   <!-- LEFT FINGER -->
-   <joint name="${name}_guide_joint_finger_left" type="fixed">
-      <origin xyz="${finger_tip} 0 ${finger_length}" rpy="0 0 0" />
-      <parent link="${name}_gripper_left"/>
-      <child link="${name}_finger_left" />
-      <dynamics friction="100" damping="100" />
-      <axis xyz="1 0 0"/>
-      <limit effort="100" velocity="100"/>
-   </joint>
-
-  <link name="${name}_finger_left">
-      <inertial>
-         <mass value="0.1" />
-         <origin xyz="0 0 0" />
-         <inertia ixx="1.0" ixy="0.0" ixz="0.0"
-               iyy="1.0" iyz="0.0" 
-               izz="1.0" />
-      </inertial>
-
-      <visual>
-         <origin xyz="0.0 0 0" rpy="0 0 0" />
-         <geometry>
-            <mesh filename="package://wsg_50_simulation/meshes/WSG-FMF.stl" scale="0.001 0.001 0.001"/>
-         </geometry>
-         <material name="black">
-		      <color rgba="0 0 0 0"/>
-      	</material>
-      </visual>
-
-      <collision>
-         <origin xyz="0 0 0" rpy="0 0 0" />
-         <geometry>
-            <mesh filename="package://wsg_50_simulation/meshes/WSG-FMF.stl" scale="0.001 0.001 0.001"/>
-         </geometry>
-     </collision>
-     <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
-  </link>
-
-   <gazebo reference="${name}_finger_left">
-      <material>Gazebo/Blue</material>
-      <turnGravityOff>false</turnGravityOff>
-   </gazebo>
-
-
   <!-- GRIPPER RIGHT -->
 
-  <joint name="${name}_finger_right_joint" type="prismatic">
+  <joint name="${name}_finger_right_joint" type="fixed">
       <limit lower="0.0027" upper="0.055" effort="1.0" velocity="1.0"/>
       <origin xyz="0 0 0" rpy="0 0 3.14159" />
       <parent link="${name}_base_link"/>
@@ -183,25 +119,6 @@
       <dynamics friction="100" damping="100" />
       <limit effort="100" velocity="100"/>
    </joint>
-
-  <!--transmission name="${name}_base_trans_right" type="pr2_mechanism_model/SimpleTransmission">
-     <actuator name="${name}_base_motor_right" />
-     <joint name="${name}_finger_right_joint" />
-     <mechanicalReduction>1</mechanicalReduction>
-     <motorTorqueConstant>1</motorTorqueConstant>
-     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-  </transmission-->
-   <transmission name="${name}_base_trans_left">	  
-      <type>transmission_interface/SimpleTransmission</type>	     
-      <actuator name="${name}_base_motor_left">	     
-         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>	    
-         <mechanicalReduction>1</mechanicalReduction>	     
-         <!--motorTorqueConstant>1</motorTorqueConstant-->	
-      </actuator>	
-      <joint name="${name}_finger_right_joint">	
-         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>	
-      </joint>	
-   </transmission>
 	
    <link name="${name}_gripper_right">
       <inertial>
@@ -234,50 +151,6 @@
   </link>
 
   <gazebo reference="gripper_right">
-    <material>Gazebo/White</material>
-    <turnGravityOff>false</turnGravityOff>
-  </gazebo>
-
-  <!-- RIGHT FINGER -->
-
-  <joint name="${name}_guide_joint_finger_right" type="fixed">
-     <origin xyz="${finger_tip} 0 ${finger_length}" rpy="0 0 0" />
-     <parent link="${name}_gripper_right"/>
-     <child link="${name}_finger_right" />
-     <dynamics friction="100" damping="100" />
-     <axis xyz="1 0 0"/>
-     <limit effort="100" velocity="100"/>
-  </joint>
-
-  <link name="${name}_finger_right">
-      <inertial>
-         <mass value="0.1" />
-         <origin xyz="0 0 0" />
-      <inertia ixx="1.0" ixy="0.0" ixz="0.0"
-               iyy="1.0" iyz="0.0" 
-               izz="1.0" />
-      </inertial>
-
-      <visual>
-         <origin xyz="0.0 0 0" rpy="0 0 0" />
-         <geometry>
-            <mesh filename="package://wsg_50_simulation/meshes/WSG-FMF.stl" scale="0.001 0.001 0.001"/>
-         </geometry>
-         <material name="black">
-		      <color rgba="0 0 0 0"/>
-      	</material>
-      </visual>
-
-      <collision>
-         <origin xyz="0 0 0" rpy="0 0 0" />
-         <geometry>
-            <mesh filename="package://wsg_50_simulation/meshes/WSG-FMF.stl" scale="0.001 0.001 0.001"/>
-         </geometry>
-     </collision>
-     <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
-  </link>
-
-  <gazebo reference="${name}_finger_right">
     <material>Gazebo/White</material>
     <turnGravityOff>false</turnGravityOff>
   </gazebo>
