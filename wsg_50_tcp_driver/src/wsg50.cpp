@@ -28,7 +28,7 @@ namespace iwtros{
             }
             if(target_width >= this->status_msg.width/1000){
                 ROS_WARN_STREAM("Executing move command current = " <<  this->status_msg.width/1000 << " width");
-                return gripperCom.move(target_width, default_speed, false, false);
+                return gripperCom.move(target_width, default_speed, true, false);
             }
             return gripperCom.grasp(target_width, default_speed);
 
@@ -82,7 +82,7 @@ namespace iwtros{
 
             //Publisher
             _pub_state = _nh.advertise<wsg_50_common::Status>("status", 1000);
-            _pub_joint = _nh.advertise<sensor_msgs::JointState>("joint_states", 10);
+            _pub_joint = _nh.advertise<sensor_msgs::JointState>("joint_wsg_states", 10);
             if(g_mode_script || g_mode_periodic)
                 _pub_moving = _nh.advertise<std_msgs::Bool>("moving", 10);
             

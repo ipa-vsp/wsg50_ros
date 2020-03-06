@@ -10,7 +10,7 @@
 int main(int argc, char** argv) {
     ros::init(argc, argv, "gripper_test_node");
     ROS_INFO("Init");
-    actionlib::SimpleActionClient<control_msgs::GripperCommandAction> client("/wsg50_gripper/wsg50_gripper_action", true);
+    actionlib::SimpleActionClient<control_msgs::GripperCommandAction> client("/iiwa/wsg50_gripper_action", true);
     ROS_INFO("Waiting for sever");
     client.waitForServer(ros::Duration(5.0));
     control_msgs::GripperCommandGoal goal;

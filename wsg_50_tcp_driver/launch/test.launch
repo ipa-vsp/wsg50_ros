@@ -2,6 +2,7 @@
 <launch>
 
   <!-- Launch the joint controller -->
-  <node pkg="wsg_50_tcp_driver" type="wsg50_action_node"  name="test" />
+  <node pkg="wsg_50_tcp_driver" type="wsg50_action_node"  name="iiwa">
+  </node>
 
 </launch>
