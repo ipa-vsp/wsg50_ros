@@ -22,15 +22,16 @@ namespace iwtros{
                 ROS_ERROR_STREAM("GripperServer: Commanding out of range with max_dith= " << GRIPPER_MAX_OPEN << "command = " << target_width);
                 return false;
             }
-            constexpr double kSamplePositionThreshold = 1e-4;
+            constexpr double kSamplePositionThreshold = 1e-3;
             if(std::abs(target_width - this->status_msg.width/1000) < kSamplePositionThreshold){
                 return true;
             }
-            if(target_width >= this->status_msg.width/1000){
-                ROS_WARN_STREAM("Executing move command current = " <<  this->status_msg.width/1000 << " width");
-                return gripperCom.move(target_width, default_speed, true, false);
-            }
-            return gripperCom.grasp(target_width, default_speed);
+            // if(target_width >= this->status_msg.width/1000){
+            //     ROS_WARN_STREAM("Executing move command current = " <<  this->status_msg.width/1000 << " width");
+            //     return gripperCom.move(target_width, default_speed, true, false);
+            // }
+            ROS_WARN_STREAM("Executing move command current = " <<  this->status_msg.width/1000 << " width");
+            return gripperCom.move(target_width, default_speed, true, false);
 
         };
 
@@ -91,6 +92,7 @@ namespace iwtros{
             gripperCom.homing();
             gripperCom.grasp(0.0, 50);
             ros::Duration(0.5).sleep();
+            grasping_force = 10;
             if(grasping_force > 0){
                 ROS_INFO("Setting grasping force limit to %5.1f", grasping_force);
                 gripperCom.setGraspingForceLimit(grasping_force);
@@ -100,9 +102,10 @@ namespace iwtros{
             std::thread th;
             if(g_mode_periodic){
                 ROS_INFO("Initializing threading");
-                th = std::thread(boost::bind(&wsg50::read_thread, this, _1), (int)(1000.0/rate));
+                _sub_ack = _nh.subscribe<std_msgs::Bool>("ack_griper", 1, boost::bind(&wsg50::ackCallback, this, _1));
+                //th = std::thread(boost::bind(&wsg50::read_thread, this, _1), (int)(1000.0/rate));
             }
-            th.join();
+            //th.join();
             ros::spin();
 
         }else{
@@ -125,6 +128,16 @@ namespace iwtros{
         ros::shutdown();
     }
 
+    void wsg50::ackCallback(const std_msgs::Bool::ConstPtr &data)
+    {
+        if(data->data)
+        {
+            ROS_WARN("Acknowleging the gripper AGAIN!");
+            gripperCom.ack_fault();
+            gripperCom.homing();
+            gripperCom.grasp(0.0, 50);
+        }
+    }
 
     void wsg50::read_thread(int interval_ms){
         ROS_INFO("Thread started");

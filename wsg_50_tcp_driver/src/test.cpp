@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
     ROS_INFO("Waiting for sever");
     client.waitForServer(ros::Duration(5.0));
     control_msgs::GripperCommandGoal goal;
-    goal.command.position = 0.05;
+    goal.command.position = 0.02;
     ROS_INFO("Sending goal");
     client.sendGoal(goal);
     ROS_INFO("Wait for result");
