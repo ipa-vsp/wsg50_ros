@@ -44,7 +44,7 @@ namespace iwtros{
         status_t status;
 
         ros::NodeHandle _nh;
-        ros::Subscriber _sub_position, _sub_speed;
+        ros::Subscriber _sub_position, _sub_speed, _sub_ack;
         ros::Publisher _pub_state, _pub_joint, _pub_moving;
         function gripperCom;
 
@@ -56,6 +56,8 @@ namespace iwtros{
          * Read Thread which is alternative to the timer callback
          */
         void read_thread(int interval_ms);
+
+        void ackCallback(const std_msgs::Bool::ConstPtr &data);
     public:
         wsg50(ros::NodeHandle& nh, const char *addr, unsigned short port);
         ~wsg50();

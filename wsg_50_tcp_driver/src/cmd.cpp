@@ -87,9 +87,12 @@ int iwtros::cmd::submit(unsigned char id, unsigned char *payload, unsigned int l
     int res;
     status_t status;
 
-    msg_t msg_sr ={msg_sr.id = id,
-                    msg_sr.len = len,
-                    msg_sr.data = payload};
+    msg_t msg_sr =
+    {
+        msg_sr.id = id,
+        msg_sr.len = len,
+        msg_sr.data = payload
+    };
     if(!connected){
         fprintf(stderr, "Interface is not connected\n");
         return -1;
