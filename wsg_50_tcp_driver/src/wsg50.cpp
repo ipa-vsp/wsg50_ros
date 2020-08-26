@@ -100,9 +100,9 @@ namespace iwtros{
 
             ROS_INFO("Init done. Starting timer/thread with target rate %.1f.", rate);
             std::thread th;
+            _sub_ack = _nh.subscribe<std_msgs::Bool>("/iiwa/ack_griper", 1, boost::bind(&wsg50::ackCallback, this, _1));
             if(g_mode_periodic){
                 ROS_INFO("Initializing threading");
-                _sub_ack = _nh.subscribe<std_msgs::Bool>("ack_griper", 1, boost::bind(&wsg50::ackCallback, this, _1));
                 //th = std::thread(boost::bind(&wsg50::read_thread, this, _1), (int)(1000.0/rate));
             }
             //th.join();
