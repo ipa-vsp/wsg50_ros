@@ -31,7 +31,7 @@ namespace iwtros{
             //     return gripperCom.move(target_width, default_speed, true, false);
             // }
             ROS_WARN_STREAM("Executing move command current = " <<  this->status_msg.width/1000 << " width");
-            return gripperCom.move(target_width, default_speed, true, false);
+            return gripperCom.move(target_width, default_speed, false, false);
 
         };
 
@@ -258,7 +258,7 @@ namespace iwtros{
                 pub_state = false;
                 _pub_state.publish(status_msg);
 
-                joint_states.header.stamp = ros::Time::now();;
+                joint_states.header.stamp = ros::Time::now();
                 joint_states.position[0] = -status_msg.width/2000.0;
                 joint_states.position[1] = status_msg.width/2000.0;
                 joint_states.velocity[0] = status_msg.speed/1000.0;

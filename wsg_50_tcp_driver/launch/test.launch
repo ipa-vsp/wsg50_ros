@@ -5,7 +5,7 @@
   <node pkg="wsg_50_tcp_driver" type="wsg50_action_node"  name="wsg_50_tcp_driver" ns="iiwa">
     <param name="ip" type="string" value="172.31.1.160"/>
 	  <param name="port" type="int" value="1501"/>
-    <param name="grasping_force" type="double" value="20"/>
+    <param name="grasping_force" type="double" value="40"/>
   </node>
 
 </launch>
