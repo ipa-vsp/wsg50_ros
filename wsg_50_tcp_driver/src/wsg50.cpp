@@ -31,6 +31,11 @@ namespace iwtros{
             //     return gripperCom.move(target_width, default_speed, true, false);
             // }
             ROS_WARN_STREAM("Executing move command current = " <<  this->status_msg.width/1000 << " width");
+            float graspF = 80.0;
+            if(graspF > 0){
+                ROS_INFO("Setting grasping force limit to %5.1f", grasping_force);
+                gripperCom.setGraspingForceLimit(graspF);
+            }
             return gripperCom.move(target_width, default_speed, false, false);
 
         };
@@ -92,7 +97,7 @@ namespace iwtros{
             gripperCom.homing();
             gripperCom.grasp(0.0, 50);
             ros::Duration(0.5).sleep();
-            grasping_force = 10;
+            grasping_force = 80;
             if(grasping_force > 0){
                 ROS_INFO("Setting grasping force limit to %5.1f", grasping_force);
                 gripperCom.setGraspingForceLimit(grasping_force);
