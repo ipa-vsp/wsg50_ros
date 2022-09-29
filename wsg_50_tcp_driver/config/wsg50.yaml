@@ -1,9 +1,0 @@
-tcp:
-  port: 1000
-  ip_addr: 172.31.1.160
-
-hardware_interface:
-  control_freq: 500 # in Hz
-  joints:
-    - wsg50_gripper_left_joint
-    - wsg50_gripper_right_joint
