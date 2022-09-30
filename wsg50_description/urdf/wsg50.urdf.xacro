@@ -59,7 +59,7 @@
             <visual>
                 <origin xyz="0.0 0 0" rpy="0 0 0" />
                 <geometry>
-                    <mesh filename="package://wsg50_description/meshes/WSG_FMF.dae" scale="0.001 0.001 0.001"/>
+                    <mesh filename="package://wsg50_description/meshes/WSG_FMF.dae" />
                 </geometry>
                 <material name="black">
                     <color rgba="0 0 0 0"/>      	   
@@ -68,7 +68,7 @@
             <collision>
                 <origin xyz="0 0 0" rpy="0 0 0" />
                 <geometry>
-                    <mesh filename="package://wsg50_description/meshes/WSG_FMF.stl" scale="0.001 0.001 0.001"/>
+                    <mesh filename="package://wsg50_description/meshes/WSG_FMF.stl" />
                 </geometry>
             </collision>
             <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
@@ -81,7 +81,7 @@
 
         <joint name="${prefix}_finger_left_joint" type="fixed">
             <limit lower="-0.055" upper="-0.0027" effort="1.0" velocity="1.0"/>
-            <origin xyz="0 0 0.3" rpy="0 0 0" />      <!--origin xyz="-0.0067 0 0.049" rpy="0 0 0" /-->
+            <origin xyz="0 0 0.09" rpy="0 0 0" />      <!--origin xyz="-0.0067 0 0.049" rpy="0 0 0" /-->
             <parent link="${prefix}_base_link"/>
             <child link="${prefix}_gripper_left" />
             <dynamics friction="100" damping="100" />
@@ -101,7 +101,7 @@
             <visual>
                 <origin xyz="0.0 0 0" rpy="0 0 0" />
                 <geometry>
-                    <mesh filename="package://wsg50_description/meshes/WSG_FMF.dae" scale="1 1 1"/>
+                    <mesh filename="package://wsg50_description/meshes/WSG_FMF.dae" />
                 </geometry>
                 <material name="black">
                     <color rgba="0 0 0 0"/>
@@ -110,7 +110,7 @@
             <collision>
                 <origin xyz="0 0 0" rpy="0 0 0" />
                 <geometry>
-                    <mesh filename="package://wsg50_description/meshes/WSG_FMF.stl" scale="0.001 0.001 0.001"/>
+                    <mesh filename="package://wsg50_description/meshes/WSG_FMF.stl"/>
                 </geometry>
             </collision>
             <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
@@ -123,7 +123,7 @@
 
         <joint name="${prefix}_finger_right_joint" type="fixed">
             <limit lower="0.0027" upper="0.055" effort="1.0" velocity="1.0"/>
-            <origin xyz="0 0 0.3" rpy="0 0 3.14159" />
+            <origin xyz="0 0 0.09" rpy="0 0 3.14159" />
             <parent link="${prefix}_base_link"/>
             <child link="${prefix}_gripper_right" />
             <axis xyz="-1 0 0"/>
