@@ -18,18 +18,41 @@
 
 #include "control_msgs/action/gripper_command.hpp"
 
+#include <wsg50_driver/visibility_control.h>
 
-namespace gripper
+#define GRIPPER_MAX_OPEN 110.0
+#define GRIPPER_MIN_OPEN 0.0
+
+namespace wsg50
 {
-    class wsg50
+    class GripperActionServer : public rclcpp::Node
     {
         public:
-        wsg50(const char * addr, unsigned short port);
-        ~wsg50();
+            using GripperCommand = control_msgs::action::GripperCommand;
+            using GoalHandleGripperCommand = rclcpp_action::ServerGoalHandle<GripperCommand>;
 
-        void gripperCommandExecution(const control_msgs::action::GripperCommand_Goal::ConstPtr goal);
+            GripperActionServer(const rclcpp::NodeOptions& options = rclcpp::NodeOptions());
+            ~GripperActionServer();
+        
+        private:
+            rclcpp_action::Server<GripperCommand>::SharedPtr gripper_command_server_;
+            rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr joint_state_publisher_;
+            rclcpp::TimerBase::SharedPtr timer_;
+            std::mutex gripper_state_mutex_;
+            std::string addr_;
+            int port_;
+
+            rclcpp_action::GoalResponse handle_goal(const rclcpp_action::GoalUUID & uuid,
+                                                    std::shared_ptr<const GripperCommand::Goal> goal);
+            rclcpp_action::CancelResponse handel_cancel(const std::shared_ptr<GoalHandleGripperCommand> goal_handle);
+
+            void executeGripperCommand(const std::shared_ptr<GoalHandleGripperCommand>& goal_handle,
+                                       const std::function<bool()>& command_handler);
+            void onExecuteGripperCommand(const std::shared_ptr<GoalHandleGripperCommand>& goal_handle);
+
+            void publishJointStates();
     };
-} // namespace gripper
+} // namespace wsg50
 
 
 

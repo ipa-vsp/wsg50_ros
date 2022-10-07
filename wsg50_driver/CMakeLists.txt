@@ -14,6 +14,16 @@ find_package(std_srvs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(control_msgs REQUIRED)
 
+# INSTALL
+# install(
+#   TARGETS ${PROJECT_NAME}
+#   DESTINATION lib
+# )
+install(
+  DIRECTORY include/
+  DESTINATION include
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
