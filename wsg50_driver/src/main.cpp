@@ -10,10 +10,10 @@ namespace wsg50
     {
         // Declare Gripper Parameters
         RCLCPP_INFO(this->get_logger(), "Starting Gripper Server");
-        this->declare_parameter("gripper_ip", "0.0.0.0");
-        this->declare_parameter("port", 0);
-        this->declare_parameter("grasp_force", 0);
-        this->declare_parameter("grasp_speed", 0.0);
+        this->declare_parameter("gripper_ip", "172.31.1.160");
+        this->declare_parameter("port", 1501);
+        this->declare_parameter("grasp_force", 40);
+        this->declare_parameter("grasp_speed", 10.0);
 
         this->addr_ = this->get_parameter("gripper_ip").as_string();
         this->port_ = this->get_parameter("port").as_int();
