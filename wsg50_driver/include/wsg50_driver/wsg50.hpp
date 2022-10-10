@@ -43,8 +43,7 @@ namespace wsg50
             using GripperCommand = control_msgs::action::GripperCommand;
             using GoalHandleGripperCommand = rclcpp_action::ServerGoalHandle<GripperCommand>;
 
-            GripperActionServer(const rclcpp::NodeOptions& options = rclcpp::NodeOptions());
-            ~GripperActionServer();
+            explicit GripperActionServer(const rclcpp::NodeOptions& options = rclcpp::NodeOptions());
         
         private:
             rclcpp_action::Server<GripperCommand>::SharedPtr gripper_command_server_;
