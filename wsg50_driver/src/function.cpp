@@ -25,11 +25,14 @@
 #include "wsg50_driver/msg.h"
 #include "wsg50_driver/function.h"
 
-
 /** 
  * Initialisation
 */
-iwtros::function::function(const char *addr, unsigned short port) : cmd(addr, port) {}
+iwtros::function::function(const char *addr, unsigned short port) : cmd(addr, port) 
+{
+    std::cout << "Connection Gripper" << "/n";
+    printf("Hello");
+}
 iwtros::function::~function() {}
 
 /** 

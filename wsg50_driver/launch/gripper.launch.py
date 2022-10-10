@@ -16,7 +16,7 @@ def generate_launch_description():
     declare_arguments.append(
         DeclareLaunchArgument(
             "gripper_ip",
-            default_value="10,10,10,1",
+            default_value="172.31.1.160",
             description="Gripper IP address",
         ),
     )
@@ -24,7 +24,7 @@ def generate_launch_description():
     declare_arguments.append(
         DeclareLaunchArgument(
             "port",
-            default_value="1",
+            default_value="1501",
             description="Gripper Port Number",
         ),
     )
@@ -32,7 +32,7 @@ def generate_launch_description():
     declare_arguments.append(
         DeclareLaunchArgument(
             "grasp_force",
-            default_value="10",
+            default_value="40",
             description="Gripper grasp force",
         ),
     )

@@ -22,7 +22,7 @@ namespace wsg50
 
         RCLCPP_INFO(this->get_logger(), "Connecting to Gripper with IP addr: %s and Port: %d.", this->addr_.c_str(), this->port_);
 
-        ///this->gripper_ = std::make_shared<iwtros::function>(this->addr_.c_str(), (unsigned short)port_);
+        this->gripper_ = std::make_shared<iwtros::function>(this->addr_.c_str(), (unsigned short)port_);
 
         this->gripper_command_server_ = rclcpp_action::create_server<GripperCommand>(
             this, "~/gripper_action",
@@ -37,17 +37,17 @@ namespace wsg50
         //this->timer_ = this->create_wall_timer(rclcpp::WallRate(30).period(), [this](){return publishJointStates(); });
 
         // Check Gripper Connection
-        // if(gripper_->connected)
-        // {
-        //     RCLCPP_INFO(this->get_logger(), "Gripper acknowledge ... ");
-        //     gripper_->ack_fault();
-        //     RCLCPP_INFO(this->get_logger(), "Gripper Homing ... ");
-        //     gripper_->homing();
+        if(gripper_->connected)
+        {
+            RCLCPP_INFO(this->get_logger(), "Gripper acknowledge ... ");
+            gripper_->ack_fault();
+            RCLCPP_INFO(this->get_logger(), "Gripper Homing ... ");
+            gripper_->homing();
 
-        //     rclcpp::sleep_for(5s);
-        //     if (grasp_force_ > 0) gripper_->setGraspingForceLimit(grasp_force_);
-        //     this->sub_ack_ = this->create_subscription<std_msgs::msg::Bool>("~/ack_gripper", 10, std::bind(&GripperActionServer::ackCallback, this, _1));
-        // }
+            rclcpp::sleep_for(5s);
+            if (grasp_force_ > 0) gripper_->setGraspingForceLimit(grasp_force_);
+            this->sub_ack_ = this->create_subscription<std_msgs::msg::Bool>("~/ack_gripper", 10, std::bind(&GripperActionServer::ackCallback, this, _1));
+        }
     }
 
     void GripperActionServer::ackCallback(const std_msgs::msg::Bool::SharedPtr msg)
