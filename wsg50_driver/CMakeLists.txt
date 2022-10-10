@@ -14,14 +14,56 @@ find_package(std_srvs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(control_msgs REQUIRED)
 
+set(TCP_SRC
+  src/checksum.cpp
+  src/cmd.cpp
+  src/common.cpp
+  src/function.cpp
+  src/msg.cpp
+  src/tcp.cpp
+)
+
+add_library(${PROJECT_NAME}
+  SHARED
+  ${TCP_SRC}
+)
+target_include_directories(${PROJECT_NAME}
+  PRIVATE
+  include
+)
+
+add_library(gripper_server SHARED src/main.cpp)
+target_link_libraries(gripper_server ${PROJECT_NAME})
+target_include_directories(gripper_server PRIVATE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>)
+ament_target_dependencies(gripper_server
+  "rclcpp"
+  "rclcpp_action"
+  "rclcpp_components"
+  "sensor_msgs"
+  "control_msgs"
+)
+
+rclcpp_components_register_node(gripper_server PLUGIN "wsg50::GripperActionServer" EXECUTABLE gripper_server_node)
+
 # INSTALL
-# install(
-#   TARGETS ${PROJECT_NAME}
-#   DESTINATION lib
-# )
+install(
+  TARGETS ${PROJECT_NAME}
+  DESTINATION lib
+)
+install(TARGETS gripper_server
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
 install(
   DIRECTORY include/
   DESTINATION include
+)
+install(
+  DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
 )
 
 if(BUILD_TESTING)
