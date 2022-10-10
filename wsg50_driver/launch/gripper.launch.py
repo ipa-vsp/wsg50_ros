@@ -18,7 +18,7 @@ def generate_launch_description():
             "gripper_ip",
             default_value="10,10,10,1",
             description="Gripper IP address",
-        )
+        ),
     )
 
     declare_arguments.append(
@@ -26,7 +26,7 @@ def generate_launch_description():
             "port",
             default_value="1",
             description="Gripper Port Number",
-        )
+        ),
     )
 
     declare_arguments.append(
@@ -34,15 +34,15 @@ def generate_launch_description():
             "grasp_force",
             default_value="10",
             description="Gripper grasp force",
-        )
+        ),
     )
 
     declare_arguments.append(
         DeclareLaunchArgument(
             "grasp_speed",
-            default_value="10",
+            default_value="10.0",
             description="Gripper grasp Speed",
-        )
+        ),
     )
 
     gripper_ip = LaunchConfiguration("gripper_ip")
@@ -54,9 +54,9 @@ def generate_launch_description():
         package='wsg50_driver',
         executable='gripper_server_node',
         name=['wsg50_gripper_driver'],
-        # parameters=[{'gripper_ip': gripper_ip, 'port': port, 'grasp_force': grasp_force, 'grasp_speed': grasp_speed}],
+        parameters=[{'gripper_ip': gripper_ip, 'port': port, 'grasp_force': grasp_force, 'grasp_speed': grasp_speed}],
     )
 
-    return LaunchDescription([node] + declare_arguments)
+    return LaunchDescription(declare_arguments + [node])
 
     
