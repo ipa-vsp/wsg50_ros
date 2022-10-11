@@ -31,7 +31,7 @@
 */
 
 iwtros::cmd::cmd(const char *addr, unsigned short port){
-    int res;
+    //int res;
     tcp_params_t params;
     if(!addr) std::cout << "No address is given" << '\n';
     // if(connected) stop the constructor initialization
@@ -69,6 +69,7 @@ bool iwtros::cmd::disconnected(void){
 	}
     if ( res > 0 ) delete resp;
     _msg->close_tcp();
+    return true;
 }
 
 /** Send command and wait for answer
