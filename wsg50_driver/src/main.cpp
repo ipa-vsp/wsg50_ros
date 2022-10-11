@@ -64,7 +64,7 @@ namespace wsg50
     rclcpp_action::GoalResponse GripperActionServer::handle_goal(const rclcpp_action::GoalUUID & uuid,
                                                     std::shared_ptr<const GripperCommand::Goal> goal)
     {
-        RCLCPP_INFO(this->get_logger(), "Received goal request with order %f", goal->command.position);
+        RCLCPP_INFO(this->get_logger(), "Received goal request with position %f", goal->command.position);
         (void)uuid;
         return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
     }

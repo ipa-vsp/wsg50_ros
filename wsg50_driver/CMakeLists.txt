@@ -48,15 +48,36 @@ ament_target_dependencies(gripper_server
 
 rclcpp_components_register_node(gripper_server PLUGIN "wsg50::GripperActionServer" EXECUTABLE gripper_server_node)
 
-# INSTALL
-install(
-  TARGETS ${PROJECT_NAME}
-  DESTINATION lib
-)
 install(TARGETS gripper_server
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
+)
+
+add_library(action_client SHARED
+  src/test_client.cpp)
+target_include_directories(action_client PRIVATE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_compile_definitions(action_client
+  PRIVATE "ACTION_TUTORIALS_CPP_BUILDING_DLL")
+ament_target_dependencies(action_client
+  "rclcpp"
+  "rclcpp_action"
+  "rclcpp_components"
+  "sensor_msgs"
+  "control_msgs")
+rclcpp_components_register_node(action_client PLUGIN "wsg50::GripperActionClient" EXECUTABLE gripper_client_node)
+install(TARGETS
+  action_client
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
+# INSTALL
+install(
+  TARGETS ${PROJECT_NAME}
+  DESTINATION lib
 )
 install(
   DIRECTORY include/
