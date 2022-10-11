@@ -1,5 +1,5 @@
-#ifndef ACTION_TUTORIALS_CPP__VISIBILITY_CONTROL_H_
-#define ACTION_TUTORIALS_CPP__VISIBILITY_CONTROL_H_
+#ifndef ACTION_WSG50_GRIPPER_CPP__VISIBILITY_CONTROL_H_
+#define ACTION_WSG50_GRIPPER_CPP__VISIBILITY_CONTROL_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -11,34 +11,34 @@ extern "C"
 
 #if defined _WIN32 || defined __CYGWIN__
   #ifdef __GNUC__
-    #define ACTION_TUTORIALS_CPP_EXPORT __attribute__ ((dllexport))
-    #define ACTION_TUTORIALS_CPP_IMPORT __attribute__ ((dllimport))
+    #define ACTION_WSG50_GRIPPER_CPP_EXPORT __attribute__ ((dllexport))
+    #define ACTION_WSG50_GRIPPER_CPP_IMPORT __attribute__ ((dllimport))
   #else
-    #define ACTION_TUTORIALS_CPP_EXPORT __declspec(dllexport)
-    #define ACTION_TUTORIALS_CPP_IMPORT __declspec(dllimport)
+    #define ACTION_WSG50_GRIPPER_CPP_EXPORT __declspec(dllexport)
+    #define ACTION_WSG50_GRIPPER_CPP_IMPORT __declspec(dllimport)
   #endif
-  #ifdef ACTION_TUTORIALS_CPP_BUILDING_DLL
-    #define ACTION_TUTORIALS_CPP_PUBLIC ACTION_TUTORIALS_CPP_EXPORT
+  #ifdef ACTION_WSG50_GRIPPER_CPP_BUILDING_DLL
+    #define ACTION_WSG50_GRIPPER_CPP_PUBLIC ACTION_WSG50_GRIPPER_CPP_EXPORT
   #else
-    #define ACTION_TUTORIALS_CPP_PUBLIC ACTION_TUTORIALS_CPP_IMPORT
+    #define ACTION_WSG50_GRIPPER_CPP_PUBLIC ACTION_WSG50_GRIPPER_CPP_IMPORT
   #endif
-  #define ACTION_TUTORIALS_CPP_PUBLIC_TYPE ACTION_TUTORIALS_CPP_PUBLIC
-  #define ACTION_TUTORIALS_CPP_LOCAL
+  #define ACTION_WSG50_GRIPPER_CPP_PUBLIC_TYPE ACTION_WSG50_GRIPPER_CPP_PUBLIC
+  #define ACTION_WSG50_GRIPPER_CPP_LOCAL
 #else
-  #define ACTION_TUTORIALS_CPP_EXPORT __attribute__ ((visibility("default")))
-  #define ACTION_TUTORIALS_CPP_IMPORT
+  #define ACTION_WSG50_GRIPPER_CPP_EXPORT __attribute__ ((visibility("default")))
+  #define ACTION_WSG50_GRIPPER_CPP_IMPORT
   #if __GNUC__ >= 4
-    #define ACTION_TUTORIALS_CPP_PUBLIC __attribute__ ((visibility("default")))
-    #define ACTION_TUTORIALS_CPP_LOCAL  __attribute__ ((visibility("hidden")))
+    #define ACTION_WSG50_GRIPPER_CPP_PUBLIC __attribute__ ((visibility("default")))
+    #define ACTION_WSG50_GRIPPER_CPP_LOCAL  __attribute__ ((visibility("hidden")))
   #else
-    #define ACTION_TUTORIALS_CPP_PUBLIC
-    #define ACTION_TUTORIALS_CPP_LOCAL
+    #define ACTION_WSG50_GRIPPER_CPP_PUBLIC
+    #define ACTION_WSG50_GRIPPER_CPP_LOCAL
   #endif
-  #define ACTION_TUTORIALS_CPP_PUBLIC_TYPE
+  #define ACTION_WSG50_GRIPPER_CPP_PUBLIC_TYPE
 #endif
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // ACTION_TUTORIALS_CPP__VISIBILITY_CONTROL_H_
+#endif  // ACTION_WSG50_GRIPPER_CPP__VISIBILITY_CONTROL_H_
