@@ -43,7 +43,8 @@ namespace wsg50
             gripper_->ack_fault();
             RCLCPP_INFO(this->get_logger(), "Gripper Homing ... ");
             gripper_->homing();
-
+            gripper_->grasp(0, 20.0);
+            gripper_->homing();
             rclcpp::sleep_for(5s);
             if (grasp_force_ > 0) gripper_->setGraspingForceLimit(grasp_force_);
             this->sub_ack_ = this->create_subscription<std_msgs::msg::Bool>("~/ack_gripper", 10, std::bind(&GripperActionServer::ackCallback, this, _1));

@@ -30,8 +30,7 @@
 */
 iwtros::function::function(const char *addr, unsigned short port) : cmd(addr, port) 
 {
-    std::cout << "Connection Gripper" << "/n";
-    printf("Hello");
+    std::cout << "Connecting Gripper" << "/n";
 }
 iwtros::function::~function() {}
 

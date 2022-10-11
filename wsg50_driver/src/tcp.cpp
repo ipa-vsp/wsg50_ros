@@ -46,12 +46,13 @@ iwtros::tcp::tcp(const void *params){
     setsockopt(conn.sock, SOL_SOCKET, SO_RCVTIMEO, (void *) &timeout, (socklen_t) sizeof(timeout));    /// Used "timeout" instead of "struct timeout" inside sizeof
 
     try{
-        connect(conn.sock, (struct sockaddr *) &conn.si_server, sizeof(conn.si_server));
-        result = true;
+        res = connect(conn.sock, (struct sockaddr *) &conn.si_server, sizeof(conn.si_server));
     }catch(const std::exception& e){
         std::cerr << e.what() << " = Open TCP socket is FAILED" << '\n';
-        result = false; 
     }
+
+    if(res == 0) this->result = true;
+    else this->result = false;
 }
 
 iwtros::tcp::~tcp(){ 

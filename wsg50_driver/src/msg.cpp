@@ -70,7 +70,7 @@ int iwtros::msg::send(msg_t *msg){
         return -1;
     }
 
-    delete buf; // free dymanically allocated memory
+    delete[] buf; // free dymanically allocated memory
     return msg->len + 8;
 }
 
