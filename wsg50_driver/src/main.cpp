@@ -26,11 +26,9 @@ namespace wsg50
 
         this->gripper_command_server_ = rclcpp_action::create_server<GripperCommand>(
             this, "~/gripper_action",
-            [this](auto uuid, auto goal){return handle_goal(uuid, goal);},
-            [this](const auto& goal_handle){return handel_cancel(goal_handle);},
-            [this](const auto& goal_handle){
-                return std::thread{[goal_handle, this](){ onExecuteGripperCommand(goal_handle); }}.detach();
-            }
+            std::bind(&GripperActionServer::handle_goal, this, _1, _2),
+            std::bind(&GripperActionServer::handel_cancel, this, _1),
+            std::bind(&GripperActionServer::handle_accepted, this, _1)
         );
 
         this->joint_state_publisher_ = this->create_publisher<sensor_msgs::msg::JointState>("~/joint_states", 1);
@@ -76,6 +74,11 @@ namespace wsg50
         return rclcpp_action::CancelResponse::ACCEPT;
     }
 
+    void GripperActionServer::handle_accepted(const std::shared_ptr<GoalHandleGripperCommand> goal_handle)
+    {
+        std::thread{std::bind(&GripperActionServer::onExecuteGripperCommand, this, _1), goal_handle}.detach();
+    }
+
     void GripperActionServer::onExecuteGripperCommand(const std::shared_ptr<GoalHandleGripperCommand>& goal_handle)
     {
         const auto goal = goal_handle->get_goal();
@@ -94,18 +97,41 @@ namespace wsg50
         // Todo: Add current state elements. 
         guard.unlock();
 
-        auto command = [targetWidth, targetForce, goal, this](){
-            if(targetForce > 0 && grasp_force_ > 0)
+        auto gripper_result = std::make_shared<GripperCommand::Result>();
+        try
+        {
+            gripper_result->reached_goal = gripper_command(targetWidth, targetForce);
+        } catch(const std::exception &e) {
+            gripper_result->reached_goal = false;
+            RCLCPP_ERROR(this->get_logger(), e.what());
+        }
+
+        if(rclcpp::ok())
+        {
+            if(gripper_result->reached_goal)
             {
-                RCLCPP_INFO(this->get_logger(), "Setting Grasp force to %5.1f", targetForce);
-                gripper_->setGraspingForceLimit(targetForce);
+                //rclcpp::sleep_for(std::chrono::seconds(5));
+                RCLCPP_INFO(this->get_logger(), "Gripper succeeded");
+                goal_handle->succeed(gripper_result);
+            } else {
+                RCLCPP_INFO(this->get_logger(), "Gripper failed");
+                goal_handle->abort(gripper_result);
             }
+        }
+    }
 
-            // return move action this->status_msgs.width
-            return gripper_->move(targetWidth, 20.0, false, false);
-        };
+    bool GripperActionServer::gripper_command(const double targetWidth, const double targetForce)
+    {
+        if(targetForce > 0 && grasp_force_ > 0)
+        {
+            RCLCPP_INFO(this->get_logger(), "Setting Grasp force to %5.1f", targetForce);
+            gripper_->setGraspingForceLimit(targetForce);
+        }
 
-        executeGripperCommand(goal_handle, command);
+        // return move action this->status_msgs.width
+        bool res = gripper_->move(targetWidth, 40.0, false, false);
+        while(!res) res = gripper_->move(targetWidth, 40.0, false, false);
+        return res;
     }
 
     void GripperActionServer::executeGripperCommand(const std::shared_ptr<GoalHandleGripperCommand>& goal_handle,
@@ -120,7 +146,6 @@ namespace wsg50
                 result->reached_goal = false;
                 RCLCPP_ERROR(this->get_logger(), e.what());
             }
-
             return result;
         };
 
@@ -136,6 +161,7 @@ namespace wsg50
 
             if(result->reached_goal)
             {
+                //rclcpp::sleep_for(std::chrono::seconds(5));
                 RCLCPP_INFO(this->get_logger(), "Gripper succeeded");
                 goal_handle->succeed(result);
             } else {

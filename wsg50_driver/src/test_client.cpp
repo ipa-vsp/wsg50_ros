@@ -29,6 +29,7 @@ namespace wsg50
             {
                 using namespace std::placeholders;
 
+                //this->timer_->cancel();
                 if(!this->client_ptr->wait_for_action_server())
                 {
                     RCLCPP_ERROR(this->get_logger(), "Action server not available after waiting");
@@ -47,13 +48,16 @@ namespace wsg50
 
                 auto send_goal_options = rclcpp_action::Client<GripperCommand>::SendGoalOptions();
                 send_goal_options.goal_response_callback = std::bind(&GripperActionClient::goal_response_callback, this, _1);
-                send_goal_options.feedback_callback = std::bind(&GripperActionClient::feedback_callback, this, _1, _2);
                 send_goal_options.result_callback = std::bind(&GripperActionClient::result_callback, this, _1);
 
+                RCLCPP_INFO(this->get_logger(), "Open");
                 this->client_ptr->async_send_goal(open_goal, send_goal_options);
-                rclcpp::sleep_for(std::chrono::seconds(10));
+                
+                rclcpp::sleep_for(std::chrono::seconds(5));
+                RCLCPP_INFO(this->get_logger(), "Close");
                 this->client_ptr->async_send_goal(close_goal, send_goal_options);
-                rclcpp::sleep_for(std::chrono::seconds(10));
+                rclcpp::sleep_for(std::chrono::seconds(5));
+                //this->timer_->call();
             }
         
         private:
@@ -87,6 +91,7 @@ namespace wsg50
                 switch (result.code)
                 {
                 case rclcpp_action::ResultCode::SUCCEEDED:
+                    RCLCPP_ERROR(this->get_logger(), "Goal was Success");
                     break;
                 case rclcpp_action::ResultCode::ABORTED:
                     RCLCPP_ERROR(this->get_logger(), "Goal was aborted");

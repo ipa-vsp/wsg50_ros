@@ -70,6 +70,6 @@ def generate_launch_description():
         name=['wsg50_gripper_driver'],
     )
 
-    nodes = [gripper_server_launch, node_client]
+    nodes = [node_client]
 
     return LaunchDescription(declare_arguments + nodes)

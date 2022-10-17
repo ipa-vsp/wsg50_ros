@@ -16,7 +16,7 @@ def generate_launch_description():
     declare_arguments.append(
         DeclareLaunchArgument(
             "gripper_ip",
-            default_value="172.31.1.160",
+            default_value="192.168.1.160",
             description="Gripper IP address",
         ),
     )

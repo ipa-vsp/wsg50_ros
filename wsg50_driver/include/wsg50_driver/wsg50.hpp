@@ -62,6 +62,7 @@ namespace wsg50
             rclcpp_action::GoalResponse handle_goal(const rclcpp_action::GoalUUID & uuid,
                                                     std::shared_ptr<const GripperCommand::Goal> goal);
             rclcpp_action::CancelResponse handel_cancel(const std::shared_ptr<GoalHandleGripperCommand> goal_handle);
+            void handle_accepted(const std::shared_ptr<GoalHandleGripperCommand> goal_handle);
 
             void executeGripperCommand(const std::shared_ptr<GoalHandleGripperCommand>& goal_handle,
                                        const std::function<bool()>& command_handler);
@@ -69,6 +70,8 @@ namespace wsg50
 
             void publishJointStates();
             void ackCallback(const std_msgs::msg::Bool::SharedPtr msg);
+
+            bool gripper_command(const double targetWidth, const double targetForce);
     };
 } // namespace wsg50
 

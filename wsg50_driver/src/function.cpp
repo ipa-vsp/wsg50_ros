@@ -100,7 +100,7 @@ bool iwtros::function::move( float width, float speed, bool stop_on_block, bool 
         if(res != 2){
             dbgPrint( "Response payload length doesn't match (is %d, expected 2)\n", res );
             if ( res > 0 ) delete resp;
-            return true;            //Chage the return to 0
+            return false;            //Chage the return to 0
         }
 
         //Check response status
@@ -109,7 +109,11 @@ bool iwtros::function::move( float width, float speed, bool stop_on_block, bool 
         if(status != E_SUCCESS){
             dbgPrint( "Command MOVE not successful: %s\n", status_to_str( status ) );
             return false;
+        } else
+        {
+            dbgPrint( "Command MOVE successful: %s\n", status_to_str( status ) );
         }
+        
     }else{
         //Submit the command, do not wait for the response
         msg_t msg_send;
