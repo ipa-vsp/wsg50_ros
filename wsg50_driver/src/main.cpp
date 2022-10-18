@@ -32,7 +32,7 @@ namespace wsg50
         );
 
         this->joint_state_publisher_ = this->create_publisher<sensor_msgs::msg::JointState>("~/joint_states", 1);
-        this->gripper_result_  = this->create_publisher<std_msgs::msg::Bool>("~/gripper_result_feedback", 1);
+        this->gripper_result_  = this->create_publisher<std_msgs::msg::Bool>("~/gripper_result_feedback", 100);
         //this->timer_ = this->create_wall_timer(rclcpp::WallRate(30).period(), [this](){return publishJointStates(); });
 
         // Check Gripper Connection
