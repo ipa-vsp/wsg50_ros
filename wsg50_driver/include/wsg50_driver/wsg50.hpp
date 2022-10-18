@@ -49,6 +49,7 @@ namespace wsg50
         private:
             rclcpp_action::Server<GripperCommand>::SharedPtr gripper_command_server_;
             rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr joint_state_publisher_;
+            rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr gripper_result_;
             rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr sub_ack_;
             rclcpp::TimerBase::SharedPtr timer_;
             std::mutex gripper_state_mutex_;

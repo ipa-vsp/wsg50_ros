@@ -29,3 +29,4 @@
 ## ToDo (wsg50_driver):
 1. Currently `set(CMAKE_BUILD_TYPE Debug)` is set in CMakeLists.txt to avoid `**overload**`. 
 2. The error occures in file `msg.cpp` line **62**, if `set(CMAKE_BUILD_TYPE Debug)` is not set or cmake build type is *Release*.
+3. Client goal response is not called until timer is cancelled. 

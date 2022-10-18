@@ -32,6 +32,7 @@ namespace wsg50
         );
 
         this->joint_state_publisher_ = this->create_publisher<sensor_msgs::msg::JointState>("~/joint_states", 1);
+        this->gripper_result_  = this->create_publisher<std_msgs::msg::Bool>("~/gripper_result_feedback", 1);
         //this->timer_ = this->create_wall_timer(rclcpp::WallRate(30).period(), [this](){return publishJointStates(); });
 
         // Check Gripper Connection
@@ -84,6 +85,7 @@ namespace wsg50
         const auto goal = goal_handle->get_goal();
         const auto targetWidth = std::abs(2000 * goal->command.position);
         const auto targetForce = goal->command.max_effort;
+        auto pub_result_feedback = std_msgs::msg::Bool();
 
         std::unique_lock<std::mutex> guard(gripper_state_mutex_);
         //constexpr double kSamplePositionThreshold = 1e-3;
@@ -113,9 +115,13 @@ namespace wsg50
                 //rclcpp::sleep_for(std::chrono::seconds(5));
                 RCLCPP_INFO(this->get_logger(), "Gripper succeeded");
                 goal_handle->succeed(gripper_result);
+                pub_result_feedback.data = true;
+                gripper_result_->publish(pub_result_feedback);
             } else {
                 RCLCPP_INFO(this->get_logger(), "Gripper failed");
                 goal_handle->abort(gripper_result);
+                pub_result_feedback.data = false;
+                gripper_result_->publish(pub_result_feedback);
             }
         }
     }

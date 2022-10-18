@@ -21,6 +21,8 @@ namespace wsg50
             explicit GripperActionClient(const rclcpp::NodeOptions &options) : Node("gripper_client_node", options)
             {
                 this->client_ptr = rclcpp_action::create_client<GripperCommand>(this, "~/gripper_action");
+                rclcpp::CallbackGroup::SharedPtr callback_group = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive, false);
+                this->callback_executor.add_callback_group(callback_group, this->get_node_base_interface());
                 
                 this->timer_ = this->create_wall_timer(std::chrono::microseconds(500), std::bind(&GripperActionClient::send_goal, this));
             }
@@ -29,7 +31,7 @@ namespace wsg50
             {
                 using namespace std::placeholders;
 
-                //this->timer_->cancel();
+                this->timer_->cancel();
                 if(!this->client_ptr->wait_for_action_server())
                 {
                     RCLCPP_ERROR(this->get_logger(), "Action server not available after waiting");
@@ -51,18 +53,19 @@ namespace wsg50
                 send_goal_options.result_callback = std::bind(&GripperActionClient::result_callback, this, _1);
 
                 RCLCPP_INFO(this->get_logger(), "Open");
-                this->client_ptr->async_send_goal(open_goal, send_goal_options);
-                
-                rclcpp::sleep_for(std::chrono::seconds(5));
+                auto gho_future = this->client_ptr->async_send_goal(open_goal, send_goal_options);
+                gho_future.wait_for(std::chrono::seconds(2));
+
+                // rclcpp::sleep_for(std::chrono::seconds(5));
                 RCLCPP_INFO(this->get_logger(), "Close");
-                this->client_ptr->async_send_goal(close_goal, send_goal_options);
-                rclcpp::sleep_for(std::chrono::seconds(5));
-                //this->timer_->call();
+                auto ghc_future = this->client_ptr->async_send_goal(close_goal, send_goal_options);
+                ghc_future.wait_for(std::chrono::seconds(2));
             }
         
         private:
             rclcpp_action::Client<GripperCommand>::SharedPtr client_ptr;
             rclcpp::TimerBase::SharedPtr timer_;
+            rclcpp::executors::MultiThreadedExecutor callback_executor;
 
             void goal_response_callback(const GoalHandleGripper::SharedPtr & goal_handle)
             {
@@ -103,6 +106,7 @@ namespace wsg50
                     RCLCPP_ERROR(this->get_logger(), "Unknown result code");
                     return;
                 }
+                timer_->reset();
             }
     };
 } // namespace wsg50
