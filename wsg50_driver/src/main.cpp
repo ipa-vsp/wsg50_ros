@@ -132,12 +132,15 @@ namespace wsg50
         {
             RCLCPP_INFO(this->get_logger(), "Setting Grasp force to %5.1f", targetForce);
             gripper_->setGraspingForceLimit(targetForce);
+            bool res = gripper_->grasp(targetWidth, 40.0);
+            // while(!res) res = gripper_->grasp(targetWidth, 40.0);
+            return res;
+        } else {
+            // return move action this->status_msgs.width
+            bool res = gripper_->move(targetWidth, 40.0, false, false);
+            while(!res) res = gripper_->move(targetWidth, 40.0, false, false);
+            return res;
         }
-
-        // return move action this->status_msgs.width
-        bool res = gripper_->move(targetWidth, 40.0, false, false);
-        while(!res) res = gripper_->move(targetWidth, 40.0, false, false);
-        return res;
     }
 
     void GripperActionServer::executeGripperCommand(const std::shared_ptr<GoalHandleGripperCommand>& goal_handle,

@@ -219,7 +219,7 @@ bool iwtros::function::grasp (float objWidth, float speed){
     if(res != 2){
         dbgPrint( "Response payload length doesn't match (is %d, expected 2)\n", res );
         if ( res > 0 ) delete resp;
-        return true;            //Chage the return to 0
+        return false;            //Chage the return to 0
     }
 
     //Check response status
