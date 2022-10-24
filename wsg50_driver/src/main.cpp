@@ -137,7 +137,7 @@ namespace wsg50
             return res;
         } else {
             // return move action this->status_msgs.width
-            bool res = gripper_->move(targetWidth, 40.0, false, false);
+            bool res = gripper_->move(targetWidth, 150.0, false, false);
             while(!res) res = gripper_->move(targetWidth, 40.0, false, false);
             return res;
         }
