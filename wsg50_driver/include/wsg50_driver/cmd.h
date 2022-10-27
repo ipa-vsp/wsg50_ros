@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *************************************************************** */
 #ifndef CMD_H_
 #define CMD_H_
@@ -19,18 +19,21 @@
 #include "common.h"
 #include "wsg50_driver/msg.h"
 
-namespace iwtros{
-    class cmd{
-        public:
-            cmd(const char *addr, unsigned short port);
-            ~cmd();  
-            bool disconnected(void);
-            bool is_connected( void );
-            status_t get_response_status(unsigned char * response);
-            int submit(unsigned char id, unsigned char *payload, unsigned int len, bool pending, unsigned char **response, unsigned int *response_len);
-            bool connected = false;
-            msg * _msg;
-    };
-}
+namespace iwtros
+{
+class cmd
+{
+  public:
+    cmd(const char *addr, unsigned short port);
+    ~cmd();
+    bool disconnected(void);
+    bool is_connected(void);
+    status_t get_response_status(unsigned char *response);
+    int submit(unsigned char id, unsigned char *payload, unsigned int len, bool pending, unsigned char **response,
+               unsigned int *response_len);
+    bool connected = false;
+    msg *_msg;
+};
+} // namespace iwtros
 
 #endif // !CMD_H_
