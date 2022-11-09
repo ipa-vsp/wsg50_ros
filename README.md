@@ -1,5 +1,7 @@
 # ROS2 (humble) package for Schunk WSG50
 
+[![humble](https://github.com/prachandabhanu/wsg50_ros/actions/workflows/build.yml/badge.svg)](https://github.com/prachandabhanu/wsg50_ros/actions/workflows/build.yml)
+
 ## Setup
 1. Setup IP for gripper and `ping 172.31.1.160`
 2. Open web browser with `172.31.1.160` to open gripper config.  
