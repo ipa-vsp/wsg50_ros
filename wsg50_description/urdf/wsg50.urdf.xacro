@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    
+
 
     <xacro:macro name="wsg50" params="prefix parent finger_length finger_tip *origin">
         <joint name="${prefix}_gripper_joint" type="fixed">
@@ -55,7 +55,7 @@
                 <mass value="0.1" />
                 <origin xyz="0 0 0" />
                 <inertia ixx="1.0" ixy="0.0" ixz="0.0"
-                    iyy="1.0" iyz="0.0" 
+                    iyy="1.0" iyz="0.0"
                     izz="1.0" />
             </inertial>
             <visual>
@@ -95,7 +95,7 @@
                 <mass value="0.1" />
                 <origin xyz="0 0 0" />
             <inertia ixx="1.0" ixy="0.0" ixz="0.0"
-                    iyy="1.0" iyz="0.0" 
+                    iyy="1.0" iyz="0.0"
                     izz="1.0" />
             </inertial>
             <visual>

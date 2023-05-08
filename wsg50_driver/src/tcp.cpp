@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  ****************************************************************/
 
 //Includes
@@ -31,7 +31,7 @@ iwtros::tcp::tcp(const void *params){
     int res;
     _tcp = (tcp_params_t *) params;
     conn.server = _tcp->addr;
-    
+
     conn.sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     if(conn.sock < 0) fprintf(stderr, "Can not connect to TCP SOCKET\n");
 
@@ -40,7 +40,7 @@ iwtros::tcp::tcp(const void *params){
     conn.si_server.sin_port = htons(_tcp->port);
     conn.si_server.sin_addr.s_addr = _tcp->addr;
 
-    unsigned int val = 1024; 
+    unsigned int val = 1024;
     setsockopt(conn.sock, SOL_SOCKET, SO_RCVBUF, (void *) &val, (socklen_t)sizeof(val));
     struct timeval timeout = { timeout.tv_sec = TCP_RCV_TIMEOUT_SEC, timeout.tv_usec = 0 };
     setsockopt(conn.sock, SOL_SOCKET, SO_RCVTIMEO, (void *) &timeout, (socklen_t) sizeof(timeout));    /// Used "timeout" instead of "struct timeout" inside sizeof
@@ -55,7 +55,7 @@ iwtros::tcp::tcp(const void *params){
     else this->result = false;
 }
 
-iwtros::tcp::~tcp(){ 
+iwtros::tcp::~tcp(){
     this->close_tcp();
 }
 
@@ -64,8 +64,8 @@ void iwtros::tcp::close_tcp(){
     conn.sock = 0;
 }
 
-/** Read character from TCP socket 
- * @return Charactor read
+/** Read character from TCP socket
+ * @return Character read
 */
 int iwtros::tcp::read (unsigned char *buf, unsigned int len){
     int res;

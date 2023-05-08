@@ -28,7 +28,7 @@
 
 namespace wsg50
 {
-    typedef struct 
+    typedef struct
     {
         /* data */
         std::string status;
@@ -36,7 +36,7 @@ namespace wsg50
         double speed;
         double force;
     }gripper_status;
-    
+
     class GripperActionServer : public rclcpp::Node
     {
         public:
@@ -45,7 +45,7 @@ namespace wsg50
 
             ACTION_WSG50_GRIPPER_CPP_PUBLIC
             explicit GripperActionServer(const rclcpp::NodeOptions& options = rclcpp::NodeOptions());
-        
+
         private:
             rclcpp_action::Server<GripperCommand>::SharedPtr gripper_command_server_;
             rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr joint_state_publisher_;

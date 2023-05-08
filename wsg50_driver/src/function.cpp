@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *************************************************************** */
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,16 +25,16 @@
 #include "wsg50_driver/msg.h"
 #include "wsg50_driver/function.h"
 
-/** 
+/**
  * Initialisation
 */
-iwtros::function::function(const char *addr, unsigned short port) : cmd(addr, port) 
+iwtros::function::function(const char *addr, unsigned short port) : cmd(addr, port)
 {
     std::cout << "Connecting Gripper" << "/n";
 }
 iwtros::function::~function() {}
 
-/** 
+/**
  * Support function
 */
 float iwtros::function::convert(unsigned char *b){
@@ -45,7 +45,7 @@ float iwtros::function::convert(unsigned char *b){
     return temp;
 }
 
-/** 
+/**
  * Homming
 */
 int iwtros::function::homing(void){
@@ -113,7 +113,7 @@ bool iwtros::function::move( float width, float speed, bool stop_on_block, bool 
         {
             dbgPrint( "Command MOVE successful: %s\n", status_to_str( status ) );
         }
-        
+
     }else{
         //Submit the command, do not wait for the response
         msg_t msg_send;
@@ -127,7 +127,7 @@ bool iwtros::function::move( float width, float speed, bool stop_on_block, bool 
     return true;
 }
 
-/** 
+/**
  * Stop
 */
 int iwtros::function::stop( bool ignore_response ){
@@ -142,7 +142,7 @@ int iwtros::function::stop( bool ignore_response ){
         if(res != 2){
             dbgPrint( "Response payload length doesn't match (is %d, expected 2)\n", res );
             if ( res > 0 ) delete resp;
-            return 0;          
+            return 0;
         }
 
         //Check response status
@@ -165,7 +165,7 @@ int iwtros::function::stop( bool ignore_response ){
     return 0;
 }
 
-/** 
+/**
  * Acknowledge Fault
 */
 
@@ -185,7 +185,7 @@ int iwtros::function::ack_fault(void){
     if(res != 2){
         dbgPrint( "Response payload length doesn't match (is %d, expected 2)\n", res );
         if ( res > 0 ) delete resp;
-        return 0;          
+        return 0;
     }
 
     //Check response status
@@ -233,7 +233,7 @@ bool iwtros::function::grasp (float objWidth, float speed){
 }
 
 /** Release
- * @param Width Fingure with 
+ * @param Width Fingure with
  * @param speed release speed
  * @return 0 if successful and -1 if fail
 */
@@ -288,7 +288,7 @@ int iwtros::function::script_measure_move (unsigned char cmd_type, float cmd_wid
     //Submit command and process result
     res = this->submit(CMD_CUSTOM + cmd_type, payload, 9, true, &resp, &resp_len);
     try{
-        if(res < 2) throw std::string("Invalid Respose");
+        if(res < 2) throw std::string("Invalid Response");
         status = this->get_response_status(resp);
 
         if(status == E_CMD_UNKNOWN) throw std::string("Command unknown - make sure script is running");
@@ -305,7 +305,7 @@ int iwtros::function::script_measure_move (unsigned char cmd_type, float cmd_wid
         info.speed = convert(&resp[off]);                           off += 4;
         info.f_motor = convert(&resp[off]);                         off += 4;
         info.f_finger0 = convert(&resp[off]);                       off += 4;
-        info.f_finger1 = convert(&resp[off]);                       off += 4; 
+        info.f_finger1 = convert(&resp[off]);                       off += 4;
 
         info.isMoving = (info.state & 0x02) != 0;
 
@@ -314,7 +314,7 @@ int iwtros::function::script_measure_move (unsigned char cmd_type, float cmd_wid
 				info.state, info.position, info.speed, info.f_motor, info.f_finger0, info.f_finger1,
 				info.state_text.c_str());
     }catch(std::string msg){
-        msg = "measure_move: " + msg + "\n"; 
+        msg = "measure_move: " + msg + "\n";
         dbgPrint ("%s", msg.c_str());
 		if (res > 0) delete(resp);
 		return 0;
@@ -325,7 +325,7 @@ int iwtros::function::script_measure_move (unsigned char cmd_type, float cmd_wid
 }
 
 
-/** Set Acceleration 
+/** Set Acceleration
  * @param acc acceleration value
 */
 int iwtros::function::setAcceleration(float acc){
@@ -354,7 +354,7 @@ int iwtros::function::setAcceleration(float acc){
     return 0;
 }
 
-/** Set Force 
+/** Set Force
  * @param force force value
 */
 int iwtros::function::setGraspingForceLimit(float force){
@@ -442,11 +442,11 @@ const char * iwtros::function::systemState(void){
 		return 0;
 	}
 	delete resp;
-    return 0;    
+    return 0;
 }
 
 /**
- * Get Grasping State 
+ * Get Grasping State
  * @brief re-examin the return value
 */
 int iwtros::function::graspingState(void){
@@ -462,7 +462,7 @@ int iwtros::function::graspingState(void){
     if(res != 3){
         dbgPrint( "Response payload length doesn't match (is %d, expected 2)\n", res );
         if ( res > 0 ) delete resp;
-        return 0;            
+        return 0;
     }
 
     //Check response status
@@ -520,7 +520,7 @@ float iwtros::function::getOpeningSpeedForce(unsigned char cmd, int auto_update)
     return r;
 }
 
-/** Get Opening 
+/** Get Opening
  * @brief Read measured opening (width/position) from gripper (0x43).
  * @param auto_update Request periodic updates (unit: ms) from the gripper; responses need to be read out elsewhere.
  */
@@ -528,7 +528,7 @@ float iwtros::function::getOpening(int auto_update) {
     return getOpeningSpeedForce(0x43, auto_update);
 }
 
-/** Get Speed 
+/** Get Speed
  * @brief Read measured speed from gripper (0x44).
  * @param auto_update Request periodic updates (unit: ms) from the gripper; responses need to be read out elsewhere.
  */
@@ -536,7 +536,7 @@ float iwtros::function::getSpeed(int auto_update) {
     return getOpeningSpeedForce(0x44, auto_update);
 }
 
-/** Get Froce 
+/** Get Force
  * @brief brief Read measured force from gripper (0x45).
  * @param auto_update Request periodic updates (unit: ms) from the gripper; responses need to be read out elsewhere.
  */

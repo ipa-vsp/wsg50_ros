@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  ****************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,7 +20,7 @@
 #include "wsg50_driver/common.h"
 
 
-/** 
+/**
  * @brief Convert IP address string to IP address type
  * @param *str		String containing IP address
  * @return IP address type
@@ -100,13 +100,13 @@ void quit( const char *reason )
 const char * getStateValue( unsigned char *b ){
 
 	/*
-	unsigned char aux[4]; 
-	
+	unsigned char aux[4];
+
 	aux[0] = b[0];
 	aux[1] = b[1];
 	aux[2] = b[2];
 	aux[3] = b[3];
-	
+
 	dbgPrint("Dins de getStateValues.\n");
 	dbgPrint("b[2] = 0x%x\n", b[2]);
 	dbgPrint("b[3] = 0x%x\n", b[3]);
@@ -171,12 +171,12 @@ const char * getStateValue( unsigned char *b ){
 		//dbgPrint("Temperature Warning.\n");
 		char aux13[23] = " Temperature Warning |";
 		strcat(resp,aux13);
-	}	
+	}
 	if (b[3] & 0x40){ // D14
 		//dbgPrint("Temperature Error.\n");
 		char aux14[21]= " Temperature Error |";
 		strcat(resp, aux14);
-	}	
+	}
 	if (b[3] & 0x80){ // D15
 		//dbgPrint("Power Error.\n");
 		char aux15[15]= " Power Error |";
@@ -210,7 +210,7 @@ const char * getStateValue( unsigned char *b ){
 	}
 
 	// [D21 - D31] RESERVED
-	
+
 	// D31 ==> MSB
 
 	//dbgPrint("%s\n", resp);

@@ -37,7 +37,7 @@ class function : public cmd
     function(const char *addr, unsigned short port);
     ~function();
 
-    // Gripper Controlls
+    // Gripper Controls
     float convert(unsigned char *b);
     int homing(void);
     bool move(float width, float speed, bool stop_on_block, bool ignore_response = false);

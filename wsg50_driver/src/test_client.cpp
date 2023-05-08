@@ -23,7 +23,7 @@ namespace wsg50
                 this->client_ptr = rclcpp_action::create_client<GripperCommand>(this, "~/gripper_action");
                 rclcpp::CallbackGroup::SharedPtr callback_group = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive, false);
                 this->callback_executor.add_callback_group(callback_group, this->get_node_base_interface());
-                
+
                 this->timer_ = this->create_wall_timer(std::chrono::microseconds(500), std::bind(&GripperActionClient::send_goal, this));
             }
 
@@ -61,7 +61,7 @@ namespace wsg50
                 auto ghc_future = this->client_ptr->async_send_goal(close_goal, send_goal_options);
                 ghc_future.wait_for(std::chrono::seconds(2));
             }
-        
+
         private:
             rclcpp_action::Client<GripperCommand>::SharedPtr client_ptr;
             rclcpp::TimerBase::SharedPtr timer_;
