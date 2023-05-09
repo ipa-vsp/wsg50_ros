@@ -5,7 +5,7 @@
     <xacro:arg name="description_package" default="wsg50_description" />
 
     <xacro:property name="description_package" value="$(arg description_package)"/>
-    
+
     <xacro:include filename="$(find ${description_package})/urdf/wsg50.urdf.xacro"/>
 
     <!-- Used for fixing robot -->

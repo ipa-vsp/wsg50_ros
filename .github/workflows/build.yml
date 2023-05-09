@@ -23,7 +23,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs
           keep_files: false
-          
+
   ci_build:
     name: Colcon Build
     needs: deploy_documentation

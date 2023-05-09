@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *************************************************************** */
 
 #include <stdio.h>
@@ -25,18 +25,18 @@
 
 iwtros::msg::msg(const void *param): tcp(param){
     if(this->result){
-        std::cout << "Open message communition with TCP socket SUCCESSFULL" << '\n';
+        std::cout << "Open message communition with TCP socket SUCCESSFUL" << '\n';
     }else{
-        std::cerr << "Failed to create message communication brigde with TCP socket" << '\n';
+        std::cerr << "Failed to create message communication bridge with TCP socket" << '\n';
     }
-    
+
 }
 
 iwtros::msg::~msg(void){
     //Will the descruct the tcp??
 }
 
-/** Send command 
+/** Send command
  * @param id    Command ID
  * @param len   Payload length
  * @param *payload  Payload data
@@ -85,7 +85,7 @@ int iwtros::msg::receive(msg_t * msg){
 	unsigned short checksum = 0x50f5;	// Checksum over preamble (0xaa 0xaa 0xaa)
 	unsigned int sync;
 
-    //Syncing - neccessary for compatiblility
+    //Syncing - necessary for compatiblility
     sync = 0;
     while ( sync != MSG_PREAMBLE_LEN){
         res = this->read(header, 1);

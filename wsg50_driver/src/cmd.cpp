@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *************************************************************** */
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,7 +24,7 @@
 #include "wsg50_driver/cmd.h"
 
 
-/** 
+/**
  * This constructor initialize TCP socket communication
  * @param *addr String containing IP address
  * @param port Port number (remote)
@@ -57,9 +57,9 @@ bool iwtros::cmd::disconnected(void){
     int res;
     unsigned char *resp;
     unsigned int resp_len;
-    
+
     printf("Closing the connection\n");
-    
+
     res = this->submit(0x07, NULL, 0, false, &resp, &resp_len);
     if ( res != 2 ) printf( "Disconnect announcement failed: Response payload length doesn't match (is %d, expected 2)\n", res );
 	else{
@@ -81,7 +81,7 @@ bool iwtros::cmd::disconnected(void){
  * 					is allowed return status
  * @return Number of bytes received. -1 on error.
  */
-int iwtros::cmd::submit(unsigned char id, unsigned char *payload, unsigned int len, 
+int iwtros::cmd::submit(unsigned char id, unsigned char *payload, unsigned int len,
                         bool pending, unsigned char **response, unsigned int *response_len){
 
     int res;
@@ -122,7 +122,7 @@ int iwtros::cmd::submit(unsigned char id, unsigned char *payload, unsigned int l
             fprintf( stderr, "Response ID (%2x) does not match submitted command ID (%2x)\n", msg_sr.id, id );
 			return -1;
         }
-        
+
         if(pending){
             if(msg_sr.len < 2){
                 fprintf( stderr, "No status code received\n" );
@@ -135,7 +135,7 @@ int iwtros::cmd::submit(unsigned char id, unsigned char *payload, unsigned int l
     *response_len = msg_sr.len;
     if(msg_sr.len > 0) *response = msg_sr.data;
     else *response = 0;
-    
+
     return (int)msg_sr.len;
 }
 
