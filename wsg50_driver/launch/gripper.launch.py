@@ -58,5 +58,3 @@ def generate_launch_description():
     )
 
     return LaunchDescription(declare_arguments + [node])
-
-
